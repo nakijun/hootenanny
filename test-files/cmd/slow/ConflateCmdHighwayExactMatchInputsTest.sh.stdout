@@ -6,7 +6,13 @@
 16:21:28.549 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::BuildingOutlineRemoveOp
 16:21:28.549 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::MapCleaner
 16:21:28.549 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::ReprojectToPlanarOp
-Reprojecting 0 / 6326         Reprojecting 1000 / 6326         Reprojecting 2000 / 6326         Reprojecting 3000 / 6326         Reprojecting 4000 / 6326         Reprojecting 5000 / 6326         Reprojecting 6000 / 6326         
+Reprojecting 0 / 6326         
+Reprojecting 1000 / 6326         
+Reprojecting 2000 / 6326         
+Reprojecting 3000 / 6326         
+Reprojecting 4000 / 6326         
+Reprojecting 5000 / 6326         
+Reprojecting 6000 / 6326         
 16:21:28.593 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::DuplicateWayRemover
 16:21:28.593 INFO  ...nflate/DuplicateWayRemover.cpp(  65) Removing duplicate ways...
 16:21:28.739 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::SuperfluousWayRemover
@@ -61,13 +67,19 @@ Reprojecting 0 / 6326         Reprojecting 1000 / 6326         Reprojecting 20
 16:21:39.659 INFO  ...h/GreedyConstrainedMatches.cpp(  70) Done calculating match conflicts
 16:21:40.525 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::SuperfluousNodeRemover
 16:21:40.525 INFO  ...ops/SuperfluousNodeRemover.cpp(  54) Removing superfluous nodes...
-Reprojecting 0 / 3613         Reprojecting 1000 / 3613         Reprojecting 2000 / 3613         Reprojecting 3000 / 3613         
+Reprojecting 0 / 3613         
+Reprojecting 1000 / 3613         
+Reprojecting 2000 / 3613         
+Reprojecting 3000 / 3613         
 16:21:40.537 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::SmallWayMerger
 16:21:40.544 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  75) Applying visitor: hoot::RemoveMissingElementsVisitor
 16:21:40.547 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  75) Applying visitor: hoot::RemoveInvalidReviewRelationsVisitor
 16:21:40.549 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::RemoveDuplicateReviewsOp
 16:21:40.549 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::BuildingOutlineUpdateOp
 16:21:40.549 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::AddHilbertReviewSortOrderOp
-Reprojecting 0 / 3163         Reprojecting 1000 / 3163         Reprojecting 2000 / 3163         Reprojecting 3000 / 3163         
+Reprojecting 0 / 3163         
+Reprojecting 1000 / 3163         
+Reprojecting 2000 / 3163         
+Reprojecting 3000 / 3163         
 16:21:40.718 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from test-output/cmd/ConflateCmdHighwayExactMatchInputsTest/output.osm ...
 16:21:40.789 INFO  .../hoot/core/cmd/BaseCommand.cpp(  78) Loading map data from test-files/cmd/slow/ConflateCmdHighwayExactMatchInputsTest/output.osm ...

@@ -13,7 +13,8 @@ Reprojecting 0 / 233
 15:15:03.037 INFO  ...late/SuperfluousWayRemover.cpp(  60) Removing superfluous ways...
 15:15:03.037 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::IntersectionSplitter
 15:15:03.037 INFO  ...itter/IntersectionSplitter.cpp( 131) Splitting intersections...
-  Intersection splitter todo: 0         Intersection splitter todo: 0       
+  Intersection splitter todo: 0       
+  Intersection splitter todo: 0       
 15:15:03.038 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::UnlikelyIntersectionRemover
 15:15:03.039 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::DualWaySplitter
 15:15:03.039 INFO  ...e/splitter/DualWaySplitter.cpp(  86) Assuming drives on right.
@@ -62,7 +63,8 @@ Reprojecting 0 / 233
 15:15:04.779 INFO  ...late/SuperfluousWayRemover.cpp(  60) Removing superfluous ways...
 15:15:04.779 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::IntersectionSplitter
 15:15:04.779 INFO  ...itter/IntersectionSplitter.cpp( 131) Splitting intersections...
-  Intersection splitter todo: 0         Intersection splitter todo: 0       
+  Intersection splitter todo: 0       
+  Intersection splitter todo: 0       
 15:15:04.780 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::UnlikelyIntersectionRemover
 15:15:04.781 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  56) Applying operation: hoot::DualWaySplitter
 15:15:04.781 INFO  ...e/splitter/DualWaySplitter.cpp(  86) Assuming drives on right.

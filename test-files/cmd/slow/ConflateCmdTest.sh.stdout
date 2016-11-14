@@ -13,7 +13,8 @@ Reprojecting 0 / 233
 13:31:35.031 INFO  ...late/SuperfluousWayRemover.cpp(  60) Removing superfluous ways...
 13:31:35.031 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::IntersectionSplitter
 13:31:35.031 INFO  ...itter/IntersectionSplitter.cpp( 131) Splitting intersections...
-  Intersection splitter todo: 0         Intersection splitter todo: 0       
+  Intersection splitter todo: 0       
+  Intersection splitter todo: 0       
 13:31:35.032 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::UnlikelyIntersectionRemover
 13:31:35.032 INFO  .../cpp/hoot/core/ops/NamedOp.cpp(  57) Applying operation: hoot::DualWaySplitter
 13:31:35.032 INFO  ...e/splitter/DualWaySplitter.cpp(  86) Assuming drives on right.
