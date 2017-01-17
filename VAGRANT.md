@@ -21,6 +21,13 @@ Once Vagrant has been installed, you can start an environment by checking out th
     git submodule update
     vagrant up
 
+# OS VM choice: Ubuntu or Centos
+
+By default, running "vagrant up" will spawn an Ubuntu1404 VM. If you would like to use Centos7, add "hoot_centos7" to the command:
+```
+vagrant up hoot_centos7
+```
+
 # Other Virtualization Providers
 
 If you would like to use Parallels instead of VirtualBox, please run the following command:
@@ -48,6 +55,11 @@ The initialization of the vagrant vm will take about an hour to download require
 You should be able to log into the running VM by typing:
 
     vagrant ssh
+
+NOTE: If you built a Centos7 VM, you will need to specify "hoot_centos7" on all of the ssh commands. E.g.
+
+    vagrant ssh hoot_centos7
+
 
 Within this login shell, you can build the code, run the server or the tests. For example, to run the tests:
 

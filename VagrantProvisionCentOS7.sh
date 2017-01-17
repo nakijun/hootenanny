@@ -7,25 +7,42 @@ cd ~
 source ~/.bash_profile
 
 # Keep VagrantBuild.sh happy
-ln -s ~/.bash_profile ~/.profile
+#ln -s ~/.bash_profile ~/.profile
 
 # add EPEL repo for extra packages
-echo "### Add epel ###" > CentOS_upgrade.txt
+echo "### Add epel repo ###" > CentOS_upgrade.txt
 sudo yum -y install epel-release >> CentOS_upgrade.txt 2>&1
+
+# add the Postgres repo
+echo "### Add Postgres repo ###" > CentOS_upgrade.txt
+sudo rpm -Uvh http://yum.postgresql.org/9.5/redhat/rhel-7-x86_64/pgdg-centos95-9.5-3.noarch.rpm >> CentOS_upgrade.txt 2>&1
 
 echo "Updating OS..."
 echo "### Update ###" >> CentOS_upgrade.txt
-sudo yum -q -y update >> CentOS_upgrade.txt 2>&1
+#sudo yum -q -y update >> CentOS_upgrade.txt 2>&1
 echo "### Upgrade ###" >> CentOS_upgrade.txt
-sudo yum -q -y upgrade >> CentOS_upgrade.txt 2>&1
+#sudo yum -q -y upgrade >> CentOS_upgrade.txt 2>&1
 
 echo "### Setup NTP..."
 sudo yum -q -y install ntp
+sudo chkconfig ntpd on
 #TODO: Better way to do this?
 sudo systemctl stop ntpd
 sudo ntpd -gq
 sudo systemctl start ntpd
 
+
+# Install Java8
+# Make sure that we are in ~ before trying to wget & install stuff
+cd ~
+if  ! rpm -qa | grep jdk-8u111-linux; then
+    echo "### Installing Java8..."
+    if [ ! -f jdk-8u111-linux-x64.rpm ]; then
+      JDKURL=http://download.oracle.com/otn-pub/java/jdk/8u111-b14/jdk-8u111-linux-x64.rpm
+      wget --quiet --no-check-certificate --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie" $JDKURL
+    fi
+    sudo yum -y install ./jdk-8u111-linux-x64.rpm
+fi
 
 # install useful and needed packages for working with hootenanny
 echo "### Installing dependencies from repos..."
@@ -69,12 +86,11 @@ sudo yum -y install \
  patch  \
  pgadmin3  \
  poppler  \
- postgis  \
- postgresql \
- postgresql-contrib \
- postgresql-devel  \
- postgresql-libs  \
- postgresql-server  \
+ postgis2_95 \
+ postgresql95 \
+ postgresql95-contrib \
+ postgresql95-devel \
+ postgresql95-server \
  proj-devel  \
  protobuf-compiler  \
  protobuf-devel  \
@@ -84,7 +100,6 @@ sudo yum -y install \
  python-pip  \
  python-setuptools \
  qt-devel  \
- qt5-qtwebkit-devel  \
  ruby  \
  ruby-devel  \
  source-highlight  \
@@ -92,7 +107,6 @@ sudo yum -y install \
  texinfo-tex  \
  texlive-arabxetex  \
  texlive-collection-langcyrillic  \
- tomcat  \
  unzip  \
  w3m  \
  wget  \
@@ -200,17 +214,20 @@ sudo yum -y install \
 #texlive-arabxetex \
 #texlive-collection-langcyrillic \
 
+
 # Configure Java
 if ! grep --quiet "export JAVA_HOME" ~/.bash_profile; then
     echo "Adding Java home to profile..."
-    echo "export JAVA_HOME=/etc/alternatives/jre_1.8.0" >> ~/.bash_profile
+    export JAVA_HOME=/usr/java/jdk1.8.0_111 >> ~/.bash_profile
     source ~/.bash_profile
 fi
 
 # Configure qmake
 if ! grep --quiet "export QMAKE" ~/.bash_profile; then
     echo "### Adding qmake to profile..."
-    echo "export QMAKE=/usr/lib64/qt5/bin/qmake" >> ~/.bash_profile
+    echo "export QMAKE=/usr/lib64/qt4/bin/qmake" >> ~/.bash_profile
+    echo "export PATH=\$PATH:/usr/lib64/qt4/bin" >> ~/.bash_profile
+    echo "export QTDIR=/usr/lib64/qt4/bin" >> ~/.bash_profile
     source ~/.bash_profile
 fi
 
@@ -261,13 +278,16 @@ fi
 
 # Make sure that we are in ~ before trying to wget & install stuff
 cd ~
-if  ! rpm -qa | grep google-chrome-stable; then
-    echo "### Installing Chrome..."
-    if [ ! -f google-chrome-stable_current_x86_64.rpm ]; then
-      wget --quiet https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm
-    fi
-    sudo yum -y install ./google-chrome-stable_current_*.rpm
-fi
+
+# This is commented out since it tries to install qt3. Once we get the core building, this will get
+# re-added
+# if  ! rpm -qa | grep google-chrome-stable; then
+#     echo "### Installing Chrome..."
+#     if [ ! -f google-chrome-stable_current_x86_64.rpm ]; then
+#       wget --quiet https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm
+#     fi
+#     sudo yum -y install ./google-chrome-stable_current_*.rpm
+# fi
 
 if [ ! -f bin/chromedriver ]; then
     echo "### Installing Chromedriver..."
@@ -286,25 +306,43 @@ if ! mocha --version &>/dev/null; then
     sudo rm -rf $HOME/tmp
 fi
 
-# Configure Tomcat
-if ! grep --quiet TOMCAT6_HOME ~/.bash_profile; then
-    echo "### Adding Tomcat to profile..."
-    echo "export TOMCAT6_HOME=/var/lib/tomcat" >> ~/.bash_profile
-    source ~/.bash_profile
+echo "### Configureing Postgres..."
+# Need to figure out a way to do this automagically
+#PG_VERSION=$(sudo -u postgres psql -c 'SHOW SERVER_VERSION;' | egrep -o '[0-9]{1,}\.[0-9]{1,}'); do
+PG_VERSION=9.5
+
+# Postgresql startup
+sudo /usr/pgsql-$PG_VERSION/bin/postgresql95-setup initdb
+sudo systemctl start postgresql-$PG_VERSION
+sudo systemctl enable postgresql-$PG_VERSION
+
+if ! sudo -u postgres psql -lqt | grep -i --quiet hoot; then
+    echo "### Creating Services Database..."
+    sudo -u postgres createuser --superuser hoot
+    sudo -u postgres psql -c "alter user hoot with password 'hoottest';"
+    sudo -u postgres createdb hoot --owner=hoot
+    sudo -u postgres createdb wfsstoredb --owner=hoot
+    sudo -u postgres psql -d hoot -c 'create extension hstore;'
+    sudo -u postgres psql -d postgres -c "UPDATE pg_database SET datistemplate='true' WHERE datname='wfsstoredb'" > /dev/null
+    sudo -u postgres psql -d wfsstoredb -c 'create extension postgis;' > /dev/null
+    sudo -u postgres psql -d wfsstoredb -c "GRANT ALL on geometry_columns TO PUBLIC;"
+    sudo -u postgres psql -d wfsstoredb -c "GRANT ALL on geography_columns TO PUBLIC;"
+    sudo -u postgres psql -d wfsstoredb -c "GRANT ALL on spatial_ref_sys TO PUBLIC;"
 fi
 
-
-# initialize and start postgresql
-sudo postgresql-setup initdb
-sudo service postgresql start
-sudo systemctl enable postgresql
-
-cd /tmp # To stop warnings about the postgres user not being able to access ~
-if ! sudo -u postgres grep -i --quiet Hoot /var/lib/pgsql/data/postgresql.conf; then
-   echo "### Tuning PostgreSQL"
-   sudo -u postgres sed -i.bak s/^max_connections/\#max_connections/ /var/lib/pgsql/data/postgresql.conf
-   sudo -u postgres sed -i.bak s/^shared_buffers/\#shared_buffers/ /var/lib/pgsql/data/postgresql.conf
-   sudo -u postgres bash -c "cat >> /var/lib/pgsql/data/postgresql.conf" <<EOT
+# configure Postgres settings
+PG_HB_CONF=/var/lib/pgsql/$PG_VERSION/data/pg_hba.conf
+if ! sudo grep -i --quiet hoot $PG_HB_CONF; then
+    sudo -u postgres cp $PG_HB_CONF $PG_HB_CONF.orig
+    sudo -u postgres sed -i '1ihost    all            hoot            127.0.0.1/32            md5' $PG_HB_CONF
+    sudo -u postgres sed -i '1ihost    all            hoot            ::1/128                 md5' $PG_HB_CONF
+fi
+POSTGRES_CONF=/var/lib/pgsql/$PG_VERSION/data/postgresql.conf
+if ! grep -i --quiet HOOT $POSTGRES_CONF; then
+    sudo -u postgres cp $POSTGRES_CONF $POSTGRES_CONF.orig
+    sudo -u postgres sed -i s/^max_connections/\#max_connections/ $POSTGRES_CONF
+    sudo -u postgres sed -i s/^shared_buffers/\#shared_buffers/ $POSTGRES_CONF
+    sudo -u postgres bash -c "cat >> $POSTGRES_CONF" <<EOT
 #--------------
 # Hoot Settings
 #--------------
@@ -316,48 +354,106 @@ maintenance_work_mem = 256MB
 checkpoint_segments = 20
 autovacuum = off
 EOT
-
-    sudo service postgresql restart
 fi
 
-# NOTE: These have been changed to pg9.5
-if ! sudo -u postgres psql -lqt | grep -i --quiet hoot; then
-    echo "### Creating Services Database..."
-    sudo -u postgres createuser --superuser hoot
-    sudo -u postgres psql -c "alter user hoot with password 'hoottest';"
-    sudo -u postgres createdb hoot --owner=hoot
-    sudo -u postgres createdb wfsstoredb --owner=hoot
-    sudo -u postgres psql -d hoot -c 'create extension hstore;'
-    sudo -u postgres psql -d postgres -c "UPDATE pg_database SET datistemplate='true' WHERE datname='wfsstoredb'" > /dev/null
-    sudo -u postgres psql -d wfsstoredb -c 'create extension postgis;' > /dev/null
+# configure kernel parameters
+SYSCTL_CONF=/etc/sysctl.conf
+if ! grep --quiet 1173741824 $SYSCTL_CONF; then
+    sudo cp $SYSCTL_CONF $SYSCTL_CONF.orig
+    echo "Setting kernel.shmmax"
+    sudo sysctl -w kernel.shmmax=1173741824
+    sudo sh -c "echo 'kernel.shmmax=1173741824' >> $SYSCTL_CONF"
+    #                 kernel.shmmax=68719476736
 fi
+if ! grep --quiet 2097152 $SYSCTL_CONF; then
+    echo "Setting kernel.shmall"
+    sudo sysctl -w kernel.shmall=2097152
+    sudo sh -c "echo 'kernel.shmall=2097152' >> $SYSCTL_CONF"
+    #                 kernel.shmall=4294967296
+fi
+sudo systemctl restart postgresql-$PG_VERSION
 
 cd ~
 
+echo "### Installing Tomcat8..."
+# NOTE: We could pull the RPM from the Hoot repo and install it instead of doing all of the manual steps.
+#sudo bash -c "cat >> /etc/yum.repos.d/hoot.repo" <<EOT
+# [hoot]
+# name=hoot
+# baseurl=https://s3.amazonaws.com/hoot-rpms/snapshot/el6/
+# gpgcheck=0
+#EOT
 
-# Build and install GEOS if needed.  NOTE: geos-3.4.2 seems to be standard on Centos7
-if ! ldconfig -p | grep --quiet libgeos-3.4.2; then
-    if [ ! -d geos-3.4.2 ]; then
-        if [ ! -f geos-3.4.2.tar.bz2 ]; then
-            echo "### Downloading GEOS source..."
-            wget --quiet http://download.osgeo.org/geos/geos-3.4.2.tar.bz2
-        fi
-        echo "#### Extracting GEOS source..."
-        tar -xvf geos-3.4.2.tar.bz2
-    fi
-        cd geos-3.4.2
-        echo "### Building geos..."
-        echo "GEOS: configure"
-        sudo ./configure --enable-python
-        echo "GEOS: make"
-        sudo make -sj$(nproc) > GEOS_Build.txt 2>&1
-        echo "GEOS: install"
-        sudo make -s install >> GEOS_Build.txt 2>&1
-        cd ~
+# Or
+# wget https://s3.amazonaws.com/hoot-rpms/snapshot/el6/tomcat8-8.5.8-1.noarch.rpm
+# rpm -ivh tomcat8-8.5.8-1.noarch.rpm
+
+
+# Manual Install
+sudo groupadd tomcat
+sudo useradd -M -s /bin/nologin -g tomcat -d /var/lib/tomcat8 tomcat
+
+if [ ! -f apache-tomcat-8.5.9.tar.gz ]; then
+    wget http://apache.mirrors.ionfish.org/tomcat/tomcat-8/v8.5.9/bin/apache-tomcat-8.5.9.tar.gz
+fi
+
+sudo mkdir /var/lib/tomcat8
+sudo tar xvf apache-tomcat-8*tar.gz -C /var/lib/tomcat8 --strip-components=1
+cd /var/lib/tomcat8
+sudo chgrp -R tomcat /var/lib/tomcat8
+sudo chmod -R g+r conf
+sudo chmod g+x conf
+sudo chown -R tomcat webapps/ work/ temp/ logs/
+
+sudo bash -c "cat >> /etc/systemd/system/tomcat.service" <<EOT
+# Systemd unit file for tomcat
+[Unit]
+Description=Apache Tomcat Web Application Container
+After=syslog.target network.target
+
+[Service]
+Type=forking
+
+Environment=JAVA_HOME=/usr/java/jdk1.8.0_111
+Environment=CATALINA_PID=/var/lib/tomcat8/temp/tomcat.pid
+Environment=CATALINA_HOME=/var/lib/tomcat8
+Environment=CATALINA_BASE=/var/lib/tomcat8
+Environment='CATALINA_OPTS=-Xms512M -Xmx2048M -server -XX:+UseParallelGC'
+Environment='JAVA_OPTS=-Djava.awt.headless=true -Djava.security.egd=file:/dev/./urandom'
+
+ExecStart=/var/lib/tomcat8/bin/startup.sh
+ExecStop=/bin/kill -15 $MAINPID
+
+User=tomcat
+Group=tomcat
+UMask=0007
+RestartSec=10
+Restart=always
+
+[Install]
+WantedBy=multi-user.targetEOT
+EOT
+
+# Start Tomcat8
+sudo systemctl daemon-reload
+sudo systemctl start tomcat
+sudo systemctl enable tomcat
+
+
+# Configure Tomcat for the user
+if ! grep --quiet TOMCAT8_HOME ~/.bash_profile; then
+    echo "### Adding Tomcat to profile..."
+    echo "export TOMCAT8_HOME=/var/lib/tomcat8" >> ~/.bash_profile
+    source ~/.bash_profile
 fi
 
 
+# Quick gdal fix to get hoot compiling
+sudo yum -y install gdal
+
 exit
+
+# This is commented out. Once we get Hoot compiling, then it can go back in
 
 # TODO: Add check for previously installed GDAL
 # download gdal for compiling, we do this so we get the desired version and can configure it

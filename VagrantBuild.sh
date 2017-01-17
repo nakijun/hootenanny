@@ -2,7 +2,15 @@
 
 set -e
 
-source ~/.profile
+# Set this for use later
+export OS_NAME=$(awk -F= '/^NAME/{print $2}' /etc/os-release)
+
+if [ "$OS_NAME" == "Ubuntu" ]; then
+  source ~/.profile
+else # Centos
+  source ~/.bash_profile
+fi
+
 #cd $HOOT_HOME
 cd hoot
 source ./SetupEnv.sh
@@ -15,7 +23,7 @@ if [ -f missing ]; then
   rm -f missing
 fi
 
-aclocal && autoconf && autoheader && automake --add-missing && ./configure --quiet --with-rnd --with-services --with-uitests
+aclocal && autoconf && autoheader && automake --add-missing --copy && ./configure --quiet --with-rnd --with-services --with-uitests
 
 if [ ! -f LocalConfig.pri ] && ! grep --quiet QMAKE_CXX LocalConfig.pri; then
     echo 'Customizing LocalConfig.pri...'
@@ -35,7 +43,12 @@ mkdir -p $HOOT_HOME/ingest/processed
 mkdir -p $HOOT_HOME/upload
 
 # vagrant will auto start the tomcat service for us, so just copy the web app files w/o manipulating the server
-sudo -u tomcat8 scripts/CopyWebAppsToTomcat.sh #&> /dev/null
+if [ "$OS_NAME" == "Ubuntu" ]; then
+  sudo -u tomcat8 scripts/CopyWebAppsToTomcat.sh #&> /dev/null
+else # Centos
+  sudo -u tomcat scripts/CopyWebAppsToTomcat.sh #&> /dev/null
+fi
+
 
 # docs build is always failing the first time during the npm install portion for an unknown reason, but then
 # always passes the second time its run...needs fixed, but this is the workaround for now
