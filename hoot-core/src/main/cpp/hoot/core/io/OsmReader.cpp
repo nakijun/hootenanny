@@ -321,8 +321,6 @@ void OsmReader::open(QString url)
 
 void OsmReader::read(boost::shared_ptr<OsmMap> map)
 {
-  LOG_DEBUG("OsmReader::read");
-
   _osmFound = false;
 
   _missingNodeCount = 0;
