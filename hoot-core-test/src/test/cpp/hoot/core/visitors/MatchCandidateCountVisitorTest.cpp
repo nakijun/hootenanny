@@ -76,7 +76,7 @@ public:
   void runBuildingMatchCandidateCountTest()
   {
     OsmReader reader;
-    shared_ptr<OsmMap> map(new OsmMap());
+    boost::shared_ptr<OsmMap> map(new OsmMap());
     OsmMap::resetCounters();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/conflate/unified/AllDataTypesA.osm", map);
@@ -101,7 +101,7 @@ public:
   void runHighwayMatchCandidateCountTest()
   {
     OsmReader reader;
-    shared_ptr<OsmMap> map(new OsmMap());
+    boost::shared_ptr<OsmMap> map(new OsmMap());
     OsmMap::resetCounters();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/conflate/unified/AllDataTypesA.osm", map);
@@ -126,7 +126,7 @@ public:
   void runCombinedMatchCandidateCountTest()
   {
     OsmReader reader;
-    shared_ptr<OsmMap> map(new OsmMap());
+    boost::shared_ptr<OsmMap> map(new OsmMap());
     OsmMap::resetCounters();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/conflate/unified/AllDataTypesA.osm", map);
@@ -162,7 +162,7 @@ public:
   void runScriptMatchCreatorTest()
   {
     OsmReader reader;
-    shared_ptr<OsmMap> map(new OsmMap());
+    boost::shared_ptr<OsmMap> map(new OsmMap());
     OsmMap::resetCounters();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/conflate/unified/AllDataTypesA.osm", map);
@@ -190,7 +190,7 @@ public:
   void runMultipleScriptMatchCreatorTest()
   {
     OsmReader reader;
-    shared_ptr<OsmMap> map(new OsmMap());
+    boost::shared_ptr<OsmMap> map(new OsmMap());
     OsmMap::resetCounters();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/conflate/unified/AllDataTypesA.osm", map);
@@ -220,7 +220,7 @@ public:
   void runDualPoiScriptMatchCreatorTest()
   {
     OsmReader reader;
-    shared_ptr<OsmMap> map(new OsmMap());
+    boost::shared_ptr<OsmMap> map(new OsmMap());
     OsmMap::resetCounters();
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/conflate/unified/AllDataTypesA.osm", map);

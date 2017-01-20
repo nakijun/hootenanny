@@ -41,14 +41,14 @@ void OsmMapMapper::map(HadoopPipes::MapContext& context)
     throw HootException("Error parsing start value.");
   }
 
-  shared_ptr<OsmMap> m(new OsmMap());
+  boost::shared_ptr<OsmMap> m(new OsmMap());
 
   _loadMap(m);
 
   _map(m, context);
 }
 
-void OsmMapMapper::_loadMap(shared_ptr<OsmMap>& m)
+void OsmMapMapper::_loadMap(boost::shared_ptr<OsmMap>& m)
 {
   PbfReader reader(true);
   reader.setUseFileStatus(true);

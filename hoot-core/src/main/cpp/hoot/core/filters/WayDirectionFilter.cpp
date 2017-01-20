@@ -32,7 +32,7 @@
 namespace hoot
 {
 
-WayDirectionFilter::WayDirectionFilter(const ConstOsmMapPtr& map, shared_ptr<const Way> baseWay,
+WayDirectionFilter::WayDirectionFilter(const ConstOsmMapPtr& map, boost::shared_ptr<const Way> baseWay,
   bool similarDirection) :
   _map(map)
 {
@@ -40,7 +40,7 @@ WayDirectionFilter::WayDirectionFilter(const ConstOsmMapPtr& map, shared_ptr<con
   _similarDirection = similarDirection;
 }
 
-bool WayDirectionFilter::isFiltered(const shared_ptr<const Way>& w) const
+bool WayDirectionFilter::isFiltered(const boost::shared_ptr<const Way>& w) const
 {
   return DirectionFinder::isSimilarDirection(_map, _baseWay, w) != _similarDirection;
 }

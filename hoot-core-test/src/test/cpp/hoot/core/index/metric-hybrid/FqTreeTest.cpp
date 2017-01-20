@@ -230,7 +230,7 @@ public:
 
   void runRandomQueryTest()
   {
-    shared_ptr<OsmMap> map(new OsmMap());
+    boost::shared_ptr<OsmMap> map(new OsmMap());
     PbfReader(true).read("test-files/index/hybrid/TinyGeoNamesOrg.osm.pbf", map);
 
     set<QString> bag;

@@ -46,7 +46,7 @@ public:
 
   NoInformationCriterion() {}
 
-  bool isSatisfied(const shared_ptr<const Element> &e) const
+  bool isSatisfied(const boost::shared_ptr<const Element> &e) const
   {
     LOG_VART(e);
     LOG_VART(e->getTags().getInformationCount());

@@ -53,7 +53,7 @@ public:
 
   virtual ~ElementIterator() {}
 
-  const shared_ptr<Element>& next();
+  const boost::shared_ptr<Element>& next();
 
   bool hasNext();
 
@@ -62,7 +62,7 @@ protected:
   /**
    * A method to be used by the inheriting class to add new available elements.
    */
-  void _addElement(const shared_ptr<Element>& e) { _pending.push_back(e); }
+  void _addElement(const boost::shared_ptr<Element>& e) { _pending.push_back(e); }
 
   /**
    * A method to be overridden by the implementing class. This method will be called periodically
@@ -72,8 +72,8 @@ protected:
   virtual void _next() = 0;
 
 private:
-  shared_ptr<Element> _current;
-  list< shared_ptr<Element> > _pending;
+  boost::shared_ptr<Element> _current;
+  list< boost::shared_ptr<Element> > _pending;
 };
 
 }

@@ -47,7 +47,7 @@ namespace hoot
 {
 using namespace geos::geom;
 
-FourPassManager::FourPassManager(shared_ptr<TileWorker2> worker)
+FourPassManager::FourPassManager(boost::shared_ptr<TileWorker2> worker)
 {
   _worker = worker;
   // set the buffer to ~5km.

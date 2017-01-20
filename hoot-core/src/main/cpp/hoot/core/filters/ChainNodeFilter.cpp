@@ -38,20 +38,20 @@ ChainNodeFilter::ChainNodeFilter()
   _aggregator = Or;
 }
 
-ChainNodeFilter::ChainNodeFilter(shared_ptr<NodeFilter> f1)
+ChainNodeFilter::ChainNodeFilter(boost::shared_ptr<NodeFilter> f1)
 {
   addFilter(f1);
   _aggregator = Or;
 }
 
-ChainNodeFilter::ChainNodeFilter(shared_ptr<NodeFilter> f1, shared_ptr<NodeFilter> f2)
+ChainNodeFilter::ChainNodeFilter(boost::shared_ptr<NodeFilter> f1, boost::shared_ptr<NodeFilter> f2)
 {
   addFilter(f1);
   addFilter(f2);
   _aggregator = Or;
 }
 
-bool ChainNodeFilter::isFiltered(const shared_ptr<const Node>& n) const
+bool ChainNodeFilter::isFiltered(const boost::shared_ptr<const Node>& n) const
 {
   if (_aggregator == Or)
   {

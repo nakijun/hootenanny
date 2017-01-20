@@ -101,7 +101,7 @@ void PartialNetworkMerger::_applyMerger(const OsmMapPtr& map, WayMatchStringMerg
   QList<ConstNodePtr> scrapNodeList;
   ExtractNodesVisitor extractVisitor(scrapNodeList);
   str2->visitRo(*map, extractVisitor);
-  shared_ptr<NodeToWayMap> n2w = map->getIndex().getNodeToWayMap();
+  boost::shared_ptr<NodeToWayMap> n2w = map->getIndex().getNodeToWayMap();
   LOG_VAR(str2);
   LOG_VAR(scrapNodeList);
   LOG_VAR(n2w->getWaysByNode(-36));

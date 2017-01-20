@@ -47,13 +47,13 @@ class UnionPolygonsVisitor : public ElementConstOsmMapVisitor
 public:
   UnionPolygonsVisitor();
 
-  const shared_ptr<Geometry>& getUnion() const { return _result; }
+  const boost::shared_ptr<Geometry>& getUnion() const { return _result; }
 
-  virtual void visit(const shared_ptr<const Element>& e);
+  virtual void visit(const boost::shared_ptr<const Element>& e);
 
 private:
 
-  shared_ptr<Geometry> _result;
+  boost::shared_ptr<Geometry> _result;
 };
 
 }

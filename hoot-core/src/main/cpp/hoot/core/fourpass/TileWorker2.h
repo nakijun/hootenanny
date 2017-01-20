@@ -31,12 +31,16 @@
 // GDAL Includes
 #include <ogrsf_frmts.h>
 
+// Hoot
+#include <hoot/core/ops/OsmMapOperation.h>
+
+#define int64 opencv_broken_int
+#include <hoot/core/util/OpenCv.h>
+#undef int64
+
 // GEOS
 #include <geos/geom/Envelope.h>
 
-// Hoot
-#include <hoot/core/ops/OsmMapOperation.h>
-#include <hoot/core/util/OpenCv.h>
 
 // Qt
 #include <QString>
@@ -69,7 +73,7 @@ public:
    * @param mapIn - The path to the input map.
    * @param mapOut - The path to store the output map.
    */
-  virtual void applyOp(shared_ptr<OsmMapOperation> op, const vector<Envelope>& tiles,
+  virtual void applyOp(boost::shared_ptr<OsmMapOperation> op, const vector<Envelope>& tiles,
                        QString mapIn, QString mapOut) = 0;
 
   /**

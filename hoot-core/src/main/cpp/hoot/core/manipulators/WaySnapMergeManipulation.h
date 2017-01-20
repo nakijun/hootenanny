@@ -41,17 +41,17 @@ class WaySnapMergeManipulation : public WayMergeManipulation
 {
 public:
 
-  WaySnapMergeManipulation(long leftId, long rightId, shared_ptr<const OsmMap> map,
+  WaySnapMergeManipulation(long leftId, long rightId, boost::shared_ptr<const OsmMap> map,
     Meters minSplitSize);
 
-  virtual void applyManipulation(shared_ptr<OsmMap> wm, set<ElementId>& impactedElements,
+  virtual void applyManipulation(boost::shared_ptr<OsmMap> wm, set<ElementId>& impactedElements,
     set<ElementId>& newElements) const;
 
-  virtual const set<long>& getImpactedWayIds(shared_ptr<const OsmMap> map) const;
+  virtual const set<long>& getImpactedWayIds(boost::shared_ptr<const OsmMap> map) const;
 
 protected:
 
-  //virtual double _calculateExpertProbability(shared_ptr<const OsmMap> map) const;
+  //virtual double _calculateExpertProbability(boost::shared_ptr<const OsmMap> map) const;
 
   /**
    * Snap the ends of snapee that match with either end point of middle to snapTo's end points.

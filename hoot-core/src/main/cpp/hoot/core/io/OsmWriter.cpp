@@ -247,7 +247,7 @@ void OsmWriter::_writeMetadata(QXmlStreamWriter& writer, const Element *e)
   }
 }
 
-void OsmWriter::_writeNodes(shared_ptr<const OsmMap> map, QXmlStreamWriter& writer)
+void OsmWriter::_writeNodes(boost::shared_ptr<const OsmMap> map, QXmlStreamWriter& writer)
 {
   QList<long> nids;
   NodeMap::const_iterator it = map->getNodeMap().begin();
@@ -343,7 +343,7 @@ void OsmWriter::_writeNodes(shared_ptr<const OsmMap> map, QXmlStreamWriter& writ
   }
 }
 
-void OsmWriter::_writeWays(shared_ptr<const OsmMap> map, QXmlStreamWriter& writer)
+void OsmWriter::_writeWays(boost::shared_ptr<const OsmMap> map, QXmlStreamWriter& writer)
 {
   QList<long> wids;
   WayMap::const_iterator it = map->getWays().begin();
@@ -371,7 +371,7 @@ void OsmWriter::_writeWays(shared_ptr<const OsmMap> map, QXmlStreamWriter& write
       writer.writeAttribute("ref", QString::number(w->getNodeId(j)));
       if (_includePointInWays)
       {
-        shared_ptr<const Node> n = map->getNode(nid);
+        boost::shared_ptr<const Node> n = map->getNode(nid);
         writer.writeAttribute("x", QString::number(n->getX(), 'g', _precision));
         writer.writeAttribute("y", QString::number(n->getY(), 'g', _precision));
       }
@@ -446,7 +446,7 @@ void OsmWriter::_writeWays(shared_ptr<const OsmMap> map, QXmlStreamWriter& write
   }
 }
 
-void OsmWriter::_writeRelations(shared_ptr<const OsmMap> map, QXmlStreamWriter& writer)
+void OsmWriter::_writeRelations(boost::shared_ptr<const OsmMap> map, QXmlStreamWriter& writer)
 {
   QList<long> rids;
   RelationMap::const_iterator it = map->getRelationMap().begin();
@@ -460,7 +460,7 @@ void OsmWriter::_writeRelations(shared_ptr<const OsmMap> map, QXmlStreamWriter& 
   qSort(rids.begin(), rids.end(), qLess<long>());
   for (int i = 0; i < rids.size(); i++)
   {
-    const shared_ptr<const Relation> r = map->getRelation(rids[i]);
+    const boost::shared_ptr<const Relation> r = map->getRelation(rids[i]);
     writer.writeStartElement("relation");
     writer.writeAttribute("visible", "true");
     writer.writeAttribute("id", QString::number(r->getId()));

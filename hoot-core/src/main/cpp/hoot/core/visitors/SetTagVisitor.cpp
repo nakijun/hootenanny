@@ -54,7 +54,7 @@ void SetTagVisitor::setConfiguration(const Settings& conf)
   _v = configOptions.getSetTagVisitorValue();
 }
 
-void SetTagVisitor::visit(const shared_ptr<Element>& e)
+void SetTagVisitor::visit(const boost::shared_ptr<Element>& e)
 {
   if (_k.isEmpty())
   {

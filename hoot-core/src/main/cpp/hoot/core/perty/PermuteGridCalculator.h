@@ -34,7 +34,9 @@
 #include <geos/geom/Envelope.h>
 
 // OpenCV
-#include <opencv/cv.h>
+#define int64 opencv_broken_int
+#include <hoot/core/util/OpenCv.h>
+#undef int64
 
 // Qt
 #include <QString>

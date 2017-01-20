@@ -132,7 +132,7 @@ public:
     QList< QList<SingleStat> > allStats;
 
     // read input 1
-    shared_ptr<OsmMap> map(new OsmMap());
+    boost::shared_ptr<OsmMap> map(new OsmMap());
     loadMap(map, input1, ConfigOptions().getConflateUseDataSourceIds(), Status::Unknown1);
     // read input 2
     if (!input2.isEmpty())
@@ -172,7 +172,7 @@ public:
 
     stats.append(SingleStat("Apply Named Ops Time (sec)", t.getElapsedAndRestart()));
 
-    shared_ptr<OsmMap> result = map;
+    boost::shared_ptr<OsmMap> result = map;
 
     if (ConfigOptions().getConflateEnableOldRoads())
     {

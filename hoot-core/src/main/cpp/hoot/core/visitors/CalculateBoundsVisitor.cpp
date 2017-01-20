@@ -37,7 +37,7 @@ CalculateBoundsVisitor::CalculateBoundsVisitor():
   // Empty
 }
 
-void CalculateBoundsVisitor::visit(const shared_ptr<const Element>& e)
+void CalculateBoundsVisitor::visit(const boost::shared_ptr<const Element>& e)
 {
   // TRICKY: We will be in trouble if our element is NOT a node
   if (e->getElementType() != ElementType::Node)

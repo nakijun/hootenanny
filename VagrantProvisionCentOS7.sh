@@ -19,9 +19,9 @@ sudo rpm -Uvh http://yum.postgresql.org/9.5/redhat/rhel-7-x86_64/pgdg-centos95-9
 
 echo "Updating OS..."
 echo "### Update ###" >> CentOS_upgrade.txt
-#sudo yum -q -y update >> CentOS_upgrade.txt 2>&1
+sudo yum -q -y update >> CentOS_upgrade.txt 2>&1
 echo "### Upgrade ###" >> CentOS_upgrade.txt
-#sudo yum -q -y upgrade >> CentOS_upgrade.txt 2>&1
+sudo yum -q -y upgrade >> CentOS_upgrade.txt 2>&1
 
 echo "### Setup NTP..."
 sudo yum -q -y install ntp
@@ -43,6 +43,241 @@ if  ! rpm -qa | grep jdk-8u111-linux; then
     fi
     sudo yum -y install ./jdk-8u111-linux-x64.rpm
 fi
+
+
+# install useful and needed packages for working with hootenanny
+echo "### Installing dependencies from repos..."
+sudo yum -y install \
+    automake \
+    autoconf \
+    boost-devel \
+    ccache \
+    gcc \
+    gcc-c++ \
+    cppunit-devel \
+    gdb \
+    git \
+    git-core \
+    geos-devel \
+    libtool \
+    m4 \
+    nodejs \
+    nodejs-devel \
+    npm \
+    qt \
+    qt-common \
+    qt-devel \
+    postgis2_95 \
+    postgresql95 \
+    postgresql95-contrib \
+    postgresql95-devel \
+    postgresql95-server \
+    proj \
+    proj-devel \
+    stxxl \
+    stxxl-devel \
+    python  \
+    python-devel \
+    python-matplotlib \
+    python-pip  \
+    python-setuptools \
+    opencv \
+    opencv-core \
+    opencv-devel \
+    opencv-python \
+    protobuf \
+    protobuf-compiler \
+    protobuf-devel \
+    libicu-devel \
+    maven \
+    glpk \
+    glpk-devel \
+    v8 \
+    v8-devel \
+
+
+
+
+echo "##### Temp installs #####"
+sudo yum -y install \
+    gdal \
+    gdal-devel \
+    gdal-python \
+
+
+
+echo "### Configureing Postgres..."
+# Need to figure out a way to do this automagically
+#PG_VERSION=$(sudo -u postgres psql -c 'SHOW SERVER_VERSION;' | egrep -o '[0-9]{1,}\.[0-9]{1,}'); do
+PG_VERSION=9.5
+
+cd /tmp # Stop postgres "could not change directory to" warnings
+
+# Postgresql startup
+sudo /usr/pgsql-$PG_VERSION/bin/postgresql95-setup initdb
+sudo systemctl start postgresql-$PG_VERSION
+sudo systemctl enable postgresql-$PG_VERSION
+
+if ! sudo -u postgres psql -lqt | grep -i --quiet hoot; then
+    echo "### Creating Services Database..."
+    sudo -u postgres createuser --superuser hoot
+    sudo -u postgres psql -c "alter user hoot with password 'hoottest';"
+    sudo -u postgres createdb hoot --owner=hoot
+    sudo -u postgres createdb wfsstoredb --owner=hoot
+    sudo -u postgres psql -d hoot -c 'create extension hstore;'
+    sudo -u postgres psql -d postgres -c "UPDATE pg_database SET datistemplate='true' WHERE datname='wfsstoredb'" > /dev/null
+    sudo -u postgres psql -d wfsstoredb -c 'create extension postgis;' > /dev/null
+    sudo -u postgres psql -d wfsstoredb -c "GRANT ALL on geometry_columns TO PUBLIC;"
+    sudo -u postgres psql -d wfsstoredb -c "GRANT ALL on geography_columns TO PUBLIC;"
+    sudo -u postgres psql -d wfsstoredb -c "GRANT ALL on spatial_ref_sys TO PUBLIC;"
+fi
+
+# configure Postgres settings
+PG_HB_CONF=/var/lib/pgsql/$PG_VERSION/data/pg_hba.conf
+if ! sudo grep -i --quiet hoot $PG_HB_CONF; then
+    sudo -u postgres cp $PG_HB_CONF $PG_HB_CONF.orig
+    sudo -u postgres sed -i '1ihost    all            hoot            127.0.0.1/32            md5' $PG_HB_CONF
+    sudo -u postgres sed -i '1ihost    all            hoot            ::1/128                 md5' $PG_HB_CONF
+fi
+POSTGRES_CONF=/var/lib/pgsql/$PG_VERSION/data/postgresql.conf
+if ! grep -i --quiet HOOT $POSTGRES_CONF; then
+    sudo -u postgres cp $POSTGRES_CONF $POSTGRES_CONF.orig
+    sudo -u postgres sed -i s/^max_connections/\#max_connections/ $POSTGRES_CONF
+    sudo -u postgres sed -i s/^shared_buffers/\#shared_buffers/ $POSTGRES_CONF
+    sudo -u postgres bash -c "cat >> $POSTGRES_CONF" <<EOT
+#--------------
+# Hoot Settings
+#--------------
+max_connections = 1000
+shared_buffers = 1024MB
+max_files_per_process = 1000
+work_mem = 16MB
+maintenance_work_mem = 256MB
+#checkpoint_segments = 20
+autovacuum = off
+EOT
+fi
+
+# configure kernel parameters
+SYSCTL_CONF=/etc/sysctl.conf
+if ! grep --quiet 1173741824 $SYSCTL_CONF; then
+    sudo cp $SYSCTL_CONF $SYSCTL_CONF.orig
+    echo "Setting kernel.shmmax"
+    sudo sysctl -w kernel.shmmax=1173741824
+    sudo sh -c "echo 'kernel.shmmax=1173741824' >> $SYSCTL_CONF"
+    #                 kernel.shmmax=68719476736
+fi
+if ! grep --quiet 2097152 $SYSCTL_CONF; then
+    echo "Setting kernel.shmall"
+    sudo sysctl -w kernel.shmall=2097152
+    sudo sh -c "echo 'kernel.shmall=2097152' >> $SYSCTL_CONF"
+    #                 kernel.shmall=4294967296
+fi
+sudo systemctl restart postgresql-$PG_VERSION
+
+cd ~
+
+if ! mocha --version &>/dev/null; then
+    echo "### Installing mocha for plugins test..."
+    npm
+    sudo npm install --silent -g mocha
+    # Clean up after the npm install
+    sudo rm -rf $HOME/tmp
+fi
+
+
+
+exit
+
+# From RPM Job
+    apache-maven \
+      CharLS-devel \
+      ImageMagick \
+      ant \
+      apr-devel \
+      apr-util-devel \
+      armadillo-devel \
+      bison \
+      cairo-devel \
+      cfitsio-devel \
+      chrpath \
+      cppunit-devel \
+      createrepo \
+      ctags \
+      curl-devel \
+      doxygen \
+      emacs \
+      emacs \
+      emacs-el \
+      erlang \
+      erlang \
+      expat-devel \
+      flex \
+      fontconfig-devel \
+      freexl-devel \
+      g2clib-static \
+      gd-devel \
+      geos-devel \
+      giflib-devel \
+      giflib-devel \
+      graphviz \
+      hdf-devel \
+      hdf-static \
+      hdf5-devel \
+      help2man \
+      info \
+      libX11-devel \
+      libXrandr-devel \
+      libXrender-devel \
+      libXt-devel \
+      libdap-devel \
+      libdrm-devel \
+      libgta-devel \
+      libicu-devel \
+      libjpeg-turbo-devel \
+      libotf \
+      libpng-devel \
+      librx-devel \
+      libspatialite-devel \
+      libtool \
+      libxslt \
+      libxslt \
+      lua-devel \
+      m17n-lib* \
+      m4 \
+      mysql-devel \
+      netcdf-devel \
+      numpy \
+      pango-devel \
+      pcre-devel \
+      php-devel \
+      poppler-devel \
+      proj-devel \
+      pygtk2 \
+      python-argparse \
+      python-devel \
+      python-devel \
+      readline-devel \
+      rpm-build \
+      rpm-build \
+      ruby \
+      ruby-devel \
+      sqlite-devel \
+      swig \
+      tetex-tex4ht \
+      tex* \
+      transfig \
+      unixODBC-devel \
+      w3m \
+      wget \
+      words \
+      xerces-c-devel \
+      xz-devel \
+      zlib-devel \
+
+
+
+exit
 
 # install useful and needed packages for working with hootenanny
 echo "### Installing dependencies from repos..."
@@ -71,7 +306,6 @@ sudo yum -y install \
  java  \
  lcov  \
  libX11-devel \
- libicu-devel  \
  libpng-devel \
  libtool  \
  libxslt  \
@@ -298,81 +532,6 @@ if [ ! -f bin/chromedriver ]; then
     unzip -d $HOME/bin chromedriver_linux64.zip
 fi
 
-if ! mocha --version &>/dev/null; then
-    echo "### Installing mocha for plugins test..."
-    npm
-    sudo npm install --silent -g mocha
-    # Clean up after the npm install
-    sudo rm -rf $HOME/tmp
-fi
-
-echo "### Configureing Postgres..."
-# Need to figure out a way to do this automagically
-#PG_VERSION=$(sudo -u postgres psql -c 'SHOW SERVER_VERSION;' | egrep -o '[0-9]{1,}\.[0-9]{1,}'); do
-PG_VERSION=9.5
-
-# Postgresql startup
-sudo /usr/pgsql-$PG_VERSION/bin/postgresql95-setup initdb
-sudo systemctl start postgresql-$PG_VERSION
-sudo systemctl enable postgresql-$PG_VERSION
-
-if ! sudo -u postgres psql -lqt | grep -i --quiet hoot; then
-    echo "### Creating Services Database..."
-    sudo -u postgres createuser --superuser hoot
-    sudo -u postgres psql -c "alter user hoot with password 'hoottest';"
-    sudo -u postgres createdb hoot --owner=hoot
-    sudo -u postgres createdb wfsstoredb --owner=hoot
-    sudo -u postgres psql -d hoot -c 'create extension hstore;'
-    sudo -u postgres psql -d postgres -c "UPDATE pg_database SET datistemplate='true' WHERE datname='wfsstoredb'" > /dev/null
-    sudo -u postgres psql -d wfsstoredb -c 'create extension postgis;' > /dev/null
-    sudo -u postgres psql -d wfsstoredb -c "GRANT ALL on geometry_columns TO PUBLIC;"
-    sudo -u postgres psql -d wfsstoredb -c "GRANT ALL on geography_columns TO PUBLIC;"
-    sudo -u postgres psql -d wfsstoredb -c "GRANT ALL on spatial_ref_sys TO PUBLIC;"
-fi
-
-# configure Postgres settings
-PG_HB_CONF=/var/lib/pgsql/$PG_VERSION/data/pg_hba.conf
-if ! sudo grep -i --quiet hoot $PG_HB_CONF; then
-    sudo -u postgres cp $PG_HB_CONF $PG_HB_CONF.orig
-    sudo -u postgres sed -i '1ihost    all            hoot            127.0.0.1/32            md5' $PG_HB_CONF
-    sudo -u postgres sed -i '1ihost    all            hoot            ::1/128                 md5' $PG_HB_CONF
-fi
-POSTGRES_CONF=/var/lib/pgsql/$PG_VERSION/data/postgresql.conf
-if ! grep -i --quiet HOOT $POSTGRES_CONF; then
-    sudo -u postgres cp $POSTGRES_CONF $POSTGRES_CONF.orig
-    sudo -u postgres sed -i s/^max_connections/\#max_connections/ $POSTGRES_CONF
-    sudo -u postgres sed -i s/^shared_buffers/\#shared_buffers/ $POSTGRES_CONF
-    sudo -u postgres bash -c "cat >> $POSTGRES_CONF" <<EOT
-#--------------
-# Hoot Settings
-#--------------
-max_connections = 1000
-shared_buffers = 1024MB
-max_files_per_process = 1000
-work_mem = 16MB
-maintenance_work_mem = 256MB
-checkpoint_segments = 20
-autovacuum = off
-EOT
-fi
-
-# configure kernel parameters
-SYSCTL_CONF=/etc/sysctl.conf
-if ! grep --quiet 1173741824 $SYSCTL_CONF; then
-    sudo cp $SYSCTL_CONF $SYSCTL_CONF.orig
-    echo "Setting kernel.shmmax"
-    sudo sysctl -w kernel.shmmax=1173741824
-    sudo sh -c "echo 'kernel.shmmax=1173741824' >> $SYSCTL_CONF"
-    #                 kernel.shmmax=68719476736
-fi
-if ! grep --quiet 2097152 $SYSCTL_CONF; then
-    echo "Setting kernel.shmall"
-    sudo sysctl -w kernel.shmall=2097152
-    sudo sh -c "echo 'kernel.shmall=2097152' >> $SYSCTL_CONF"
-    #                 kernel.shmall=4294967296
-fi
-sudo systemctl restart postgresql-$PG_VERSION
-
 cd ~
 
 echo "### Installing Tomcat8..."
@@ -447,9 +606,6 @@ if ! grep --quiet TOMCAT8_HOME ~/.bash_profile; then
     source ~/.bash_profile
 fi
 
-
-# Quick gdal fix to get hoot compiling
-sudo yum -y install gdal
 
 exit
 

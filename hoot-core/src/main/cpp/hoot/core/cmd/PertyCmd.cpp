@@ -53,7 +53,7 @@ public:
       throw HootException(QString("%1 takes two parameters.").arg(getName()));
     }
 
-    shared_ptr<OsmMap> map(new OsmMap());
+    boost::shared_ptr<OsmMap> map(new OsmMap());
     loadMap(map, args[0], true, Status::Unknown1);
 
     PertyOp perty;

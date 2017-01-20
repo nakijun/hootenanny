@@ -77,7 +77,7 @@ public:
 
   virtual ~Relation() {}
 
-  void addElement(const QString& role, const shared_ptr<const Element>& e);
+  void addElement(const QString& role, const boost::shared_ptr<const Element>& e);
   void addElement(const QString& role, ElementType t, long id);
   void addElement(const QString& role, ElementId);
 
@@ -96,7 +96,7 @@ public:
 
   const vector<RelationData::Entry>& getMembers() const { return _relationData->getElements(); }
 
-  virtual Envelope* getEnvelope(const shared_ptr<const ElementProvider>& ep) const;
+  virtual Envelope* getEnvelope(const boost::shared_ptr<const ElementProvider>& ep) const;
 
   virtual ElementType getElementType() const { return ElementType::Relation; }
 
@@ -118,7 +118,7 @@ public:
    * Remove all members that meet the speicified criteria. If no members meet the criteria then
    * no changes are made.
    */
-  void removeElement(const QString& role, const shared_ptr<const Element>& e);
+  void removeElement(const QString& role, const boost::shared_ptr<const Element>& e);
   void removeElement(const QString& role, ElementId eid);
   void removeElement(ElementId eid);
 
@@ -126,7 +126,7 @@ public:
    * Replaces all instances of from in the relation with to. If from is not in the relation then
    * no changes are made.
    */
-  void replaceElement(const shared_ptr<const Element>& from, const shared_ptr<const Element>& to);
+  void replaceElement(const boost::shared_ptr<const Element>& from, const boost::shared_ptr<const Element>& to);
   void replaceElement(const ConstElementPtr& from, const QList<ElementPtr>& to);
 
   /**

@@ -54,7 +54,7 @@ public:
   /**
    * Returns true if the element satisfies the criterion.
    */
-  virtual bool isSatisfied(const shared_ptr<const Element>& e) const
+  virtual bool isSatisfied(const boost::shared_ptr<const Element>& e) const
   {
     assert(_child.get());
     return !_child->isSatisfied(e);

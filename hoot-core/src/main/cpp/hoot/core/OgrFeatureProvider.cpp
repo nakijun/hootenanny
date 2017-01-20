@@ -63,14 +63,14 @@ bool OgrFeatureProvider::hasNext()
     return _next != 0;
 }
 
-shared_ptr<OGRFeature> OgrFeatureProvider::next()
+boost::shared_ptr<OGRFeature> OgrFeatureProvider::next()
 {
-    shared_ptr<OGRFeature> result = _next;
+    boost::shared_ptr<OGRFeature> result = _next;
     _next.reset(_layer->GetNextFeature());
     return result;
 }
 
-shared_ptr<OgrFeatureProvider> OgrFeatureProvider::openDataSource(const QString& ds)
+boost::shared_ptr<OgrFeatureProvider> OgrFeatureProvider::openDataSource(const QString& ds)
 {
     static bool first = true;
     if (first == true)
@@ -88,7 +88,7 @@ shared_ptr<OgrFeatureProvider> OgrFeatureProvider::openDataSource(const QString&
         throw Exception("Invalid layer count.");
     }
 
-    shared_ptr<OgrFeatureProvider> result(
+    boost::shared_ptr<OgrFeatureProvider> result(
             new OgrFeatureProvider(dataSource->GetLayer(0)));
     result->_dataSource = dataSource;
 

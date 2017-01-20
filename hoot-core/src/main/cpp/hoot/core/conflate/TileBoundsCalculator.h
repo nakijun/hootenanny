@@ -30,7 +30,10 @@
 
 // hoot
 #include <hoot/core/OsmMap.h>
+
+#define int64 opencv_broken_int
 #include <hoot/core/util/OpenCv.h>
+#undef int64
 
 namespace hoot
 {
@@ -127,9 +130,9 @@ public:
 
   vector< vector<Envelope> > calculateTiles();
 
-  void renderImage(shared_ptr<OsmMap> map);
+  void renderImage(boost::shared_ptr<OsmMap> map);
 
-  void renderImage(shared_ptr<OsmMap> map, cv::Mat& r1, cv::Mat& r2);
+  void renderImage(boost::shared_ptr<OsmMap> map, cv::Mat& r1, cv::Mat& r2);
 
   void setEnvelope(const OGREnvelope& e) { _envelope = e; }
 
@@ -164,7 +167,7 @@ private:
 
   int _calculateSplitY(const PixelBox& b);
 
-  void _countNode(const shared_ptr<Node>& n);
+  void _countNode(const boost::shared_ptr<Node>& n);
 
   double _evaluateSplitPoint(const PixelBox& pb, const Pixel& p);
 

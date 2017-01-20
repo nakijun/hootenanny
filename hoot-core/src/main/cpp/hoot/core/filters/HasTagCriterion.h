@@ -65,7 +65,7 @@ public:
     _keys.append(key);
   }
 
-  virtual bool isSatisfied(const shared_ptr<const Element> &e) const
+  virtual bool isSatisfied(const boost::shared_ptr<const Element> &e) const
   {
     for (int i = 0; i < _keys.size(); i++)
     {

@@ -57,7 +57,7 @@ public:
    * @param inputMap
    * @return
    */
-  shared_ptr<Geometry> generateGeometry(OsmMapPtr inputMap);
+  boost::shared_ptr<Geometry> generateGeometry(OsmMapPtr inputMap);
 
 private:
 

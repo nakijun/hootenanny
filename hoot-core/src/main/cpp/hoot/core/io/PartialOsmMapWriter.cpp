@@ -43,7 +43,7 @@ void PartialOsmMapWriter::write(boost::shared_ptr<const OsmMap> map)
   finalizePartial();
 }
 
-void PartialOsmMapWriter::writePartial(const shared_ptr<const OsmMap>& map)
+void PartialOsmMapWriter::writePartial(const boost::shared_ptr<const OsmMap>& map)
 {
   const NodeMap& nm = map->getNodeMap();
   for (NodeMap::const_iterator it = nm.begin(); it != nm.end(); ++it)
@@ -64,12 +64,12 @@ void PartialOsmMapWriter::writePartial(const shared_ptr<const OsmMap>& map)
   }
 }
 
-void PartialOsmMapWriter::writePartial(const shared_ptr<OsmMap>& map)
+void PartialOsmMapWriter::writePartial(const boost::shared_ptr<OsmMap>& map)
 {
-  writePartial((const shared_ptr<const OsmMap>)map);
+  writePartial((const boost::shared_ptr<const OsmMap>)map);
 }
 
-void PartialOsmMapWriter::writePartial(const shared_ptr<const Element>& e)
+void PartialOsmMapWriter::writePartial(const boost::shared_ptr<const Element>& e)
 {
   switch (e->getElementType().getEnum())
   {
@@ -87,9 +87,9 @@ void PartialOsmMapWriter::writePartial(const shared_ptr<const Element>& e)
   }
 }
 
-void PartialOsmMapWriter::writePartial(const shared_ptr<Relation>& r)
+void PartialOsmMapWriter::writePartial(const boost::shared_ptr<Relation>& r)
 {
-  writePartial((const shared_ptr<const Relation>)r);
+  writePartial((const boost::shared_ptr<const Relation>)r);
 }
 
 void PartialOsmMapWriter::writeElement(ElementInputStream& in)

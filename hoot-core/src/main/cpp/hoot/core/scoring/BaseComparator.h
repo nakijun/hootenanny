@@ -31,12 +31,15 @@
 // GDAL Includes
 #include <ogrsf_frmts.h>
 
+#define int64 opencv_broken_int
+#include <hoot/core/util/OpenCv.h>
+#undef int64
+
 // GEOS
 #include <geos/geom/Coordinate.h>
 
 // Hoot
 #include <hoot/core/Units.h>
-#include <hoot/core/util/OpenCv.h>
 
 // Qt
 #include <QRgb>
@@ -63,7 +66,7 @@ public:
   /**
    * Takes two maps for comparison as input
    */
-  BaseComparator(shared_ptr<OsmMap> map1, shared_ptr<OsmMap> map2);
+  BaseComparator(boost::shared_ptr<OsmMap> map1, boost::shared_ptr<OsmMap> map2);
 
   virtual ~BaseComparator() {}
 
@@ -74,8 +77,8 @@ public:
 protected:
 
   int _width, _height;
-  shared_ptr<OsmMap> _map1, _map2;
-  shared_ptr<OsmMap> _mapP1, _mapP2;
+  boost::shared_ptr<OsmMap> _map1, _map2;
+  boost::shared_ptr<OsmMap> _mapP1, _mapP2;
   Meters _pixelSize;
   OGREnvelope _worldBounds;
   OGREnvelope _projectedBounds;
@@ -83,9 +86,9 @@ protected:
 
   double _calculateError(const cv::Mat& image1, const cv::Mat& image2);
 
-  Coordinate _findNearestPointOnFeature(shared_ptr<OsmMap> map, Coordinate c);
+  Coordinate _findNearestPointOnFeature(boost::shared_ptr<OsmMap> map, Coordinate c);
 
-  virtual void _init(shared_ptr<OsmMap> map1, shared_ptr<OsmMap> map2);
+  virtual void _init(boost::shared_ptr<OsmMap> map1, boost::shared_ptr<OsmMap> map2);
 
   void _saveImage(cv::Mat& image, QString path, double max = 0.0, bool gradient = true);
 

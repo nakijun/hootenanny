@@ -43,7 +43,7 @@ class UnknownCriterion : public ElementCriterion
 public:
   static string className() { return "hoot::UnknownCriterion"; }
 
-  bool isSatisfied(const shared_ptr<const Element> &e) const
+  bool isSatisfied(const boost::shared_ptr<const Element> &e) const
   {
     return e->isUnknown();
   }

@@ -71,9 +71,9 @@ EdgeSubline::EdgeSubline(ConstNetworkEdgePtr e, double start, double end) :
 {
 }
 
-shared_ptr<EdgeSubline> EdgeSubline::clone() const
+boost::shared_ptr<EdgeSubline> EdgeSubline::clone() const
 {
-  return shared_ptr<EdgeSubline>(new EdgeSubline(_start, _end));
+  return boost::shared_ptr<EdgeSubline>(new EdgeSubline(_start, _end));
 }
 
 bool EdgeSubline::contains(ConstNetworkVertexPtr v) const
@@ -92,12 +92,12 @@ bool EdgeSubline::contains(ConstNetworkVertexPtr v) const
   return result;
 }
 
-shared_ptr<EdgeSubline> EdgeSubline::createFullSubline(ConstNetworkEdgePtr e)
+boost::shared_ptr<EdgeSubline> EdgeSubline::createFullSubline(ConstNetworkEdgePtr e)
 {
-  return shared_ptr<EdgeSubline>(new EdgeSubline(e, 0.0, 1.0));
+  return boost::shared_ptr<EdgeSubline>(new EdgeSubline(e, 0.0, 1.0));
 }
 
-bool EdgeSubline::overlaps(shared_ptr<const EdgeSubline> other) const
+bool EdgeSubline::overlaps(boost::shared_ptr<const EdgeSubline> other) const
 {
   bool result = false;
 

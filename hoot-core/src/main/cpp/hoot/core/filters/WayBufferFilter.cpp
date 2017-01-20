@@ -53,7 +53,7 @@ WayBufferFilter::WayBufferFilter(ConstOsmMapPtr map, ConstWayPtr baseWay, Meters
   _bufferAccuracy = -1;
 }
 
-WayBufferFilter::WayBufferFilter(ConstOsmMapPtr map, shared_ptr<LineString> baseLine, Meters buffer,
+WayBufferFilter::WayBufferFilter(ConstOsmMapPtr map, boost::shared_ptr<LineString> baseLine, Meters buffer,
   Meters circularError, double matchPercent) :
   _map(map)
 {
@@ -69,7 +69,7 @@ bool WayBufferFilter::isFiltered(const Way& w) const
   try
   {
     bool result = true;
-    shared_ptr<LineString> ls2 = ElementConverter(_map).
+    boost::shared_ptr<LineString> ls2 = ElementConverter(_map).
         convertToLineString(_map->getWay(w.getId()));
 
     if (fabs((w.getCircularError() + _buffer) - _bufferAccuracy) > 0.1)
@@ -84,13 +84,13 @@ bool WayBufferFilter::isFiltered(const Way& w) const
     if (ls2->getEnvelopeInternal()->intersects(_boundsPlus))
     {
 
-      shared_ptr<Geometry> g(_baseBuffered->intersection(ls2.get()));
+      boost::shared_ptr<Geometry> g(_baseBuffered->intersection(ls2.get()));
       double ls2Length = ls2->getLength();
       double ls2IntersectLength = g->getLength();
 
       if (ls2IntersectLength / ls2Length >= _matchPercent)
       {
-        shared_ptr<Geometry> ls2Buffer(ls2->buffer(_bufferAccuracy, 3,
+        boost::shared_ptr<Geometry> ls2Buffer(ls2->buffer(_bufferAccuracy, 3,
                                                    geos::operation::buffer::BufferOp::CAP_ROUND));
         g.reset(ls2Buffer->intersection(_baseLs.get()));
         double ls1IntersectLength = g->getLength();

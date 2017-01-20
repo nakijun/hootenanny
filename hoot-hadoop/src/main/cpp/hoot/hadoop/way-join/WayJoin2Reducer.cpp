@@ -58,7 +58,7 @@ void WayJoin2Reducer::close()
         arg(QString::fromStdString(_workDir)).
         arg(_partition, 5, 10, QChar('0'));
 
-    shared_ptr<ostream> os(fs.create(path.toStdString()));
+    boost::shared_ptr<ostream> os(fs.create(path.toStdString()));
 
     _stats.expandNodeRange(_idGen->getMaxNodeId());
     _stats.expandWayRange(_idGen->getMaxWayId());
@@ -89,7 +89,7 @@ void WayJoin2Reducer::reduce(HadoopPipes::ReduceContext& context)
     }
 
     // read out the maximum way size from the context.
-    shared_ptr<pp::Configuration> c(pp::HadoopPipesUtils::toConfiguration(context.getJobConf()));
+    boost::shared_ptr<pp::Configuration> c(pp::HadoopPipesUtils::toConfiguration(context.getJobConf()));
     _stats.read(*c);
 
     _nodeIdDelta = c->getLong(WayJoin2Mapper::nodeIdDeltaKey());
@@ -155,7 +155,7 @@ void WayJoin2Reducer::_writeNodes(HadoopPipes::ReduceContext& context)
 
 void WayJoin2Reducer::_writeWay(HadoopPipes::ReduceContext& context)
 {
-  shared_ptr<Way> w;
+  boost::shared_ptr<Way> w;
   Envelope env;
 
   _map->clear();
@@ -191,7 +191,7 @@ void WayJoin2Reducer::_writeWay(HadoopPipes::ReduceContext& context)
       long nid = v->rawWay.nodeId;
       rawNodes.insert(nid);
       // create an invalid placeholder node. We'll remove it later.
-      shared_ptr<Node> n(new Node(Status::Invalid, nid, v->rawWay.x, v->rawWay.y, 0.0));
+      boost::shared_ptr<Node> n(new Node(Status::Invalid, nid, v->rawWay.x, v->rawWay.y, 0.0));
       _map->addNode(n);
       env.expandToInclude(v->rawWay.x, v->rawWay.y);
       //LOG_INFO("Got node: " << n->toString());
@@ -235,7 +235,7 @@ void WayJoin2Reducer::_writeWay(HadoopPipes::ReduceContext& context)
     const WayMap& wm = _map->getWays();
     for (WayMap::const_iterator it = wm.begin(); it != wm.end(); ++it)
     {
-      const shared_ptr<Way>& way = it->second;
+      const boost::shared_ptr<Way>& way = it->second;
 
       if (way->getId() != w->getId() && Debug::isTroubledWay(way->getId()))
       {

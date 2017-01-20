@@ -28,8 +28,10 @@
 #define __T_DISTRIBUTION_H__
 
 // OpenCV
+#define int64 opencv_broken_int
 #include <opencv/cv.h>
 #include <opencv/cxcore.h>
+#undef int64
 
 namespace tbs
 {

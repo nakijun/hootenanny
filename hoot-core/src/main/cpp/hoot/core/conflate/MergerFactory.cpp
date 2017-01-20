@@ -38,7 +38,7 @@
 namespace hoot
 {
 
-shared_ptr<MergerFactory> MergerFactory::_theInstance;
+boost::shared_ptr<MergerFactory> MergerFactory::_theInstance;
 
 MergerFactory::MergerFactory()
 {

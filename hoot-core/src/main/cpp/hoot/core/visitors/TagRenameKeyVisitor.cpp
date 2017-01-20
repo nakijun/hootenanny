@@ -56,7 +56,7 @@ void TagRenameKeyVisitor::setConfiguration(const Settings& conf)
   }
 }
 
-void TagRenameKeyVisitor::visit(const shared_ptr<Element>& e)
+void TagRenameKeyVisitor::visit(const boost::shared_ptr<Element>& e)
 {
   LOG_VARD(_oldKey);
   LOG_VARD(_newKey);

@@ -44,11 +44,11 @@ public:
 
   EdgeSubline(ConstNetworkEdgePtr e, double start, double end);
 
-  shared_ptr<EdgeSubline> clone() const;
+  boost::shared_ptr<EdgeSubline> clone() const;
 
   bool contains(ConstNetworkVertexPtr v) const;
 
-  static shared_ptr<EdgeSubline> createFullSubline(ConstNetworkEdgePtr e);
+  static boost::shared_ptr<EdgeSubline> createFullSubline(ConstNetworkEdgePtr e);
 
   const ConstNetworkEdgePtr& getEdge() const { return _start->getEdge(); }
 
@@ -78,7 +78,7 @@ public:
    * Returns true if other overlaps (a subline in common). If they only touch at a point it is not
    * considered overlapping.
    */
-  bool overlaps(shared_ptr<const EdgeSubline> other) const;
+  bool overlaps(boost::shared_ptr<const EdgeSubline> other) const;
 
   /**
    * swap start and end.
@@ -91,8 +91,8 @@ private:
   ConstEdgeLocationPtr _start, _end;
 };
 
-typedef shared_ptr<EdgeSubline> EdgeSublinePtr;
-typedef shared_ptr<const EdgeSubline> ConstEdgeSublinePtr;
+typedef boost::shared_ptr<EdgeSubline> EdgeSublinePtr;
+typedef boost::shared_ptr<const EdgeSubline> ConstEdgeSublinePtr;
 
 bool operator==(ConstEdgeSublinePtr, ConstEdgeSublinePtr);
 inline bool operator!=(ConstEdgeSublinePtr es1, ConstEdgeSublinePtr es2)

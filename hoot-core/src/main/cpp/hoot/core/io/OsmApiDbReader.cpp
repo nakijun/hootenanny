@@ -101,7 +101,7 @@ void OsmApiDbReader::open(QString urlStr)
   _open = true;
 }
 
-void OsmApiDbReader::read(shared_ptr<OsmMap> map)
+void OsmApiDbReader::read(boost::shared_ptr<OsmMap> map)
 {
   if (_osmElemId > -1 && _osmElemType != ElementType::Unknown)
   {
@@ -128,7 +128,7 @@ void OsmApiDbReader::read(shared_ptr<OsmMap> map)
 void OsmApiDbReader::_parseAndSetTagsOnElement(ElementPtr element)
 {
   QStringList tags;
-  shared_ptr<QSqlQuery> tagItr;
+  boost::shared_ptr<QSqlQuery> tagItr;
   switch (element->getElementType().getEnum())
   {
     case ElementType::Node:
@@ -167,16 +167,16 @@ void OsmApiDbReader::_parseAndSetTagsOnElement(ElementPtr element)
 
 //TODO: _read could possibly be placed by the bounded read method set to a global extent...unless
 //this read performs better for some reason
-void OsmApiDbReader::_read(shared_ptr<OsmMap> map, const ElementType& elementType)
+void OsmApiDbReader::_read(boost::shared_ptr<OsmMap> map, const ElementType& elementType)
 {
   long elementCount = 0; //TODO: break this out by element type
   long long lastId = LLONG_MIN;
-  shared_ptr<Element> element;
+  boost::shared_ptr<Element> element;
   QStringList tags;
   bool firstElement = true;
 
   // select all
-  shared_ptr<QSqlQuery> elementResultsIterator = _database->selectElements(elementType);
+  boost::shared_ptr<QSqlQuery> elementResultsIterator = _database->selectElements(elementType);
 
   assert(elementResultsIterator->isActive());
 
@@ -265,7 +265,7 @@ void OsmApiDbReader::close()
   }
 }
 
-shared_ptr<Node> OsmApiDbReader::_resultToNode(const QSqlQuery& resultIterator, OsmMap& map)
+boost::shared_ptr<Node> OsmApiDbReader::_resultToNode(const QSqlQuery& resultIterator, OsmMap& map)
 {
   const long rawId = resultIterator.value(0).toLongLong();
   LOG_TRACE("raw ID: " << rawId);
@@ -276,7 +276,7 @@ shared_ptr<Node> OsmApiDbReader::_resultToNode(const QSqlQuery& resultIterator, 
   const double lon =
     resultIterator.value(ApiDb::NODES_LONGITUDE).toLongLong()/(double)ApiDb::COORDINATE_SCALE;
 
-  shared_ptr<Node> node(
+  boost::shared_ptr<Node> node(
     new Node(
       _status,
       nodeId,
@@ -296,7 +296,7 @@ shared_ptr<Node> OsmApiDbReader::_resultToNode(const QSqlQuery& resultIterator, 
   return node;
 }
 
-shared_ptr<Way> OsmApiDbReader::_resultToWay(const QSqlQuery& resultIterator, OsmMap& map)
+boost::shared_ptr<Way> OsmApiDbReader::_resultToWay(const QSqlQuery& resultIterator, OsmMap& map)
 {
   const long wayId = resultIterator.value(0).toLongLong();
   LOG_TRACE("raw ID: " << wayId);
@@ -307,7 +307,7 @@ shared_ptr<Way> OsmApiDbReader::_resultToWay(const QSqlQuery& resultIterator, Os
     LOG_VARD(newWayId);
   }
 
-  shared_ptr<Way> way(
+  boost::shared_ptr<Way> way(
     new Way(
       _status,
       newWayId,
@@ -341,10 +341,10 @@ void OsmApiDbReader::_addNodesForWay(vector<long> nodeIds, OsmMap& map)
     QStringList tags;
     if (map.containsNode(nodeIds[i]) == false)
     {
-      shared_ptr<QSqlQuery> queryIterator = _database->selectNodeById(nodeIds[i]);
+      boost::shared_ptr<QSqlQuery> queryIterator = _database->selectNodeById(nodeIds[i]);
       while (queryIterator->next())
       {
-        shared_ptr<Node> node = _resultToNode(*queryIterator.get(), map);
+        boost::shared_ptr<Node> node = _resultToNode(*queryIterator.get(), map);
         QString result = _database->extractTagFromRow(queryIterator, ElementType::Node);
         if (result != "")
         {
@@ -365,7 +365,7 @@ void OsmApiDbReader::_addNodesForWay(vector<long> nodeIds, OsmMap& map)
   }
 }
 
-shared_ptr<Relation> OsmApiDbReader::_resultToRelation(const QSqlQuery& resultIterator,
+boost::shared_ptr<Relation> OsmApiDbReader::_resultToRelation(const QSqlQuery& resultIterator,
   const OsmMap& map)
 {
   const long relationId = resultIterator.value(0).toLongLong();
@@ -377,7 +377,7 @@ shared_ptr<Relation> OsmApiDbReader::_resultToRelation(const QSqlQuery& resultIt
     LOG_VART(newRelationId);
   }
 
-  shared_ptr<Relation> relation(
+  boost::shared_ptr<Relation> relation(
     new Relation(
       _status,
       newRelationId,

@@ -56,15 +56,15 @@ public:
    * evaluated will automatically be added to to the buffer on evaluation.
    * @param circularError circular error of baseLine
    */
-  WayBufferFilter(ConstOsmMapPtr map, shared_ptr<LineString> baseLine, Meters buffer,
+  WayBufferFilter(ConstOsmMapPtr map, boost::shared_ptr<LineString> baseLine, Meters buffer,
     Meters circularError, double matchPercent);
 
   virtual bool isFiltered(const Way& w) const;
 
 private:
   Meters _buffer;
-  mutable shared_ptr<Geometry> _baseBuffered;
-  shared_ptr<LineString> _baseLs;
+  mutable boost::shared_ptr<Geometry> _baseBuffered;
+  boost::shared_ptr<LineString> _baseLs;
   /// Anything outside the given bounds cannot be within maxDistance
   mutable Envelope _boundsPlus;
   mutable Meters _baseLength;

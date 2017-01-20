@@ -46,7 +46,7 @@ public:
 
   NeedsReviewCriterion(ConstOsmMapPtr& map) : _map(map) { }
 
-  virtual bool isSatisfied(const shared_ptr<const Element> &e) const
+  virtual bool isSatisfied(const boost::shared_ptr<const Element> &e) const
   {
     bool review = ReviewMarker().isNeedsReview(_map, e);
     return review;

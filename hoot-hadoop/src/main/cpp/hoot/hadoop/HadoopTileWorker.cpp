@@ -120,7 +120,7 @@ MapStats HadoopTileWorker::_calculateStats(QString in)
   if (fs.getFileStatus(in.toStdString()).isDir())
   {
     // write the newly calculated stats out to the input directory.
-    shared_ptr<ostream> out(fs.create((in + "/all.stats").toStdString()));
+    boost::shared_ptr<ostream> out(fs.create((in + "/all.stats").toStdString()));
     result.write(*out);
   }
   return result;

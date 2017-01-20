@@ -59,7 +59,7 @@ public:
 private:
   const OsmMap* _map;
   Meters _minSplitSize;
-  shared_ptr<SublineStringMatcher> _sublineMatcher;
+  boost::shared_ptr<SublineStringMatcher> _sublineMatcher;
 
   /**
    * If there are exactly 2 matches

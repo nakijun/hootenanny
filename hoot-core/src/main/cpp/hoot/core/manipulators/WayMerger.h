@@ -64,22 +64,22 @@ public:
 
   virtual ~WayMerger() {}
 
-  virtual const vector< shared_ptr<Manipulation> >& findAllManipulations(
-          shared_ptr<const OsmMap> map);
+  virtual const vector< boost::shared_ptr<Manipulation> >& findAllManipulations(
+          boost::shared_ptr<const OsmMap> map);
 
-  virtual const vector< shared_ptr<Manipulation> >& findWayManipulations(
-          shared_ptr<const OsmMap> map, const vector<long>& wids);
+  virtual const vector< boost::shared_ptr<Manipulation> >& findWayManipulations(
+          boost::shared_ptr<const OsmMap> map, const vector<long>& wids);
 
 protected:
   /**
    * Creates a new manipulation and returns it. This may be delegated to a subclass.
    */
   virtual Manipulation* _createManipulation(long leftId, long rightId,
-    shared_ptr<const OsmMap> map, Meters minSplitSize);
+    boost::shared_ptr<const OsmMap> map, Meters minSplitSize);
 
 private:
 
-  vector< shared_ptr<Manipulation> > _result;
+  vector< boost::shared_ptr<Manipulation> > _result;
   boost::shared_ptr<const OsmMap> _map;
 
   Meters _minSplitSize;
@@ -87,7 +87,7 @@ private:
   /**
    * Find all parallel ways that are potential matches for the given way.
    */
-  vector<long> _findOtherWays(shared_ptr<const Way> way);
+  vector<long> _findOtherWays(boost::shared_ptr<const Way> way);
 
   void _findMatches(long baseWayId);
 
@@ -103,14 +103,14 @@ private:
 //          boost::shared_ptr<const WorkingMap> wm);
 //
 //  /** TODO */
-//  virtual const vector< shared_ptr<const Manipulation> >& findAllManipulations(
-//      shared_ptr<const OsmMap> /*map*/) { return _result2; }
+//  virtual const vector< boost::shared_ptr<const Manipulation> >& findAllManipulations(
+//      boost::shared_ptr<const OsmMap> /*map*/) { return _result2; }
 //
-//  virtual shared_ptr<WorkingMap> initialize(shared_ptr<WorkingMap> baseMap);
+//  virtual boost::shared_ptr<WorkingMap> initialize(boost::shared_ptr<WorkingMap> baseMap);
 //
 //protected:
 //
-//  vector< shared_ptr<const Manipulation> > _result2;
+//  vector< boost::shared_ptr<const Manipulation> > _result2;
 //  size_t _maxResults;
 //  // a map of all possible matches
 //  WayMatchSet _possibleMatches;
@@ -143,7 +143,7 @@ private:
 //
 //  long _mergeNodes(long nid1, long nid2, std::map<long, long>& replacementMap);
 //
-//  void _mergeWays(long wayId1, long wayId2, shared_ptr<WorkingMap> result);
+//  void _mergeWays(long wayId1, long wayId2, boost::shared_ptr<WorkingMap> result);
 //
 //  void _moveTowardLine(hoot::Node* n, const geos::geom::LineString* line);
 //};

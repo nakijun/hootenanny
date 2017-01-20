@@ -50,7 +50,7 @@ public:
   TagCriterion();
   TagCriterion(const QString& k, const QString& v) : _k(k), _v(v) {}
 
-  bool isSatisfied(const shared_ptr<const Element> &e) const
+  bool isSatisfied(const boost::shared_ptr<const Element> &e) const
   {
     assert(!_k.isEmpty());
     return e->getTags().get(_k) == _v;

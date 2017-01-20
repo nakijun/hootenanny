@@ -55,7 +55,7 @@ public:
 
   virtual void setOsmMap(const OsmMap* map) { _map = map; }
 
-  virtual void visit(const shared_ptr<const Element>& e)
+  virtual void visit(const boost::shared_ptr<const Element>& e)
   {
     _worst = max(_worst, e->getCircularError());
   }

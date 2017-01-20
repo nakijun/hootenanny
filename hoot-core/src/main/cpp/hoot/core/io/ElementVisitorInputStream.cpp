@@ -33,7 +33,7 @@
 namespace hoot
 {
 
-ElementVisitorInputStream::ElementVisitorInputStream(const shared_ptr<ElementInputStream>& elementSource, const shared_ptr<ElementVisitor>& visitor) :
+ElementVisitorInputStream::ElementVisitorInputStream(const boost::shared_ptr<ElementInputStream>& elementSource, const boost::shared_ptr<ElementVisitor>& visitor) :
   _elementSource(elementSource),
   _visitor(visitor)
 {

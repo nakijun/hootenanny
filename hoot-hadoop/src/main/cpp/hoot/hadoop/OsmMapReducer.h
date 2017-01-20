@@ -45,7 +45,7 @@ public:
 
   virtual void reduce(HadoopPipes::ReduceContext& context);
 
-  virtual void reduce(const string& key, pp::Iterator< shared_ptr<OsmMap> >& values,
+  virtual void reduce(const string& key, pp::Iterator< boost::shared_ptr<OsmMap> >& values,
     HadoopPipes::ReduceContext& context) = 0;
 
   PbfRecordWriter* getPbfRecordWriter();
@@ -57,7 +57,7 @@ private:
   PbfRecordWriter* _pbfWriter;
   PbfRecordWriter* _writer;
   PbfReader _reader;
-  shared_ptr<OsmMap> _map;
+  boost::shared_ptr<OsmMap> _map;
 };
 
 }

@@ -59,7 +59,7 @@ public:
 
   WaySplitterOp();
 
-  virtual void apply(shared_ptr<OsmMap>& map);
+  virtual void apply(boost::shared_ptr<OsmMap>& map);
 
   virtual string getClassName() const { return className(); }
 

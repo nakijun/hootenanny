@@ -86,8 +86,8 @@ protected:
 
 };
 
-typedef shared_ptr<NetworkMatcher> NetworkMatcherPtr;
-typedef shared_ptr<const NetworkMatcher> ConstNetworkMatcherPtr;
+typedef boost::shared_ptr<NetworkMatcher> NetworkMatcherPtr;
+typedef boost::shared_ptr<const NetworkMatcher> ConstNetworkMatcherPtr;
 
 // not implemented
 bool operator<(ConstNetworkMatcherPtr, ConstNetworkMatcherPtr);

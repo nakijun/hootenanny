@@ -51,7 +51,7 @@ public:
   OsmMapPtr createMap()
   {
     OsmMap::resetCounters();
-    shared_ptr<OsmMap> map(new OsmMap());
+    boost::shared_ptr<OsmMap> map(new OsmMap());
     OGREnvelope env;
     env.MinX = 0;
     env.MinY = 0;

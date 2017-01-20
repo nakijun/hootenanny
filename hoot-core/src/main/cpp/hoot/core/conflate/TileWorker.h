@@ -31,11 +31,14 @@
 // GDAL Includes
 #include <ogrsf_frmts.h>
 
+// Hoot
+#define int64 opencv_broken_int
+#include <hoot/core/util/OpenCv.h>
+#undef int64
+
 // GEOS
 #include <geos/geom/Envelope.h>
 
-// Hoot
-#include <hoot/core/util/OpenCv.h>
 
 // Qt
 #include <QString>

@@ -46,7 +46,7 @@ class OsmMapWriterFactory
 public:
   OsmMapWriterFactory();
 
-  shared_ptr<OsmMapWriter> createWriter(QString url);
+  boost::shared_ptr<OsmMapWriter> createWriter(QString url);
 
   static OsmMapWriterFactory& getInstance();
 
@@ -56,10 +56,10 @@ public:
 
   bool hasWriter(QString url);
 
-  static void write(const shared_ptr<const OsmMap>& map, QString url);
+  static void write(const boost::shared_ptr<const OsmMap>& map, QString url);
 
 private:
-  static shared_ptr<OsmMapWriterFactory> _theInstance;
+  static boost::shared_ptr<OsmMapWriterFactory> _theInstance;
 };
 
 }

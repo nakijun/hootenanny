@@ -134,7 +134,7 @@ void PbfReader::setConfiguration(const Settings &conf)
   _addSourceDateTime = configOptions.getReaderAddSourceDatetime();
 }
 
-void PbfReader::_addTag(shared_ptr<Element> e, QString key, QString value)
+void PbfReader::_addTag(boost::shared_ptr<Element> e, QString key, QString value)
 {
   if (key == MetadataTags::HootStatus())
   {
@@ -364,7 +364,7 @@ void PbfReader::_loadDenseNodes(const DenseNodes& dn)
     LOG_WARN("Dense node list sizes are not equal.");
   }
 
-  vector< shared_ptr<hoot::Node> > nodes;
+  vector< boost::shared_ptr<hoot::Node> > nodes;
   nodes.reserve(size);
 
   // the file uses delta encoding
@@ -379,7 +379,7 @@ void PbfReader::_loadDenseNodes(const DenseNodes& dn)
     long newId = _getNodeId(id);
     double x = _convertLon(lon);
     double y = _convertLat(lat);
-    shared_ptr<Node> n(new hoot::Node(_status, newId, x, y, _circularError));
+    boost::shared_ptr<Node> n(new hoot::Node(_status, newId, x, y, _circularError));
     nodes.push_back(n);
     if (_map->containsNode(newId))
     {
@@ -467,7 +467,7 @@ void PbfReader::_loadNode(const hoot::pb::Node& n)
   double x = _convertLon(n.lon());
   double y = _convertLat(n.lat());
 
-  shared_ptr<hoot::Node> newNode(new hoot::Node(_status, newId, x, y, _circularError));
+  boost::shared_ptr<hoot::Node> newNode(new hoot::Node(_status, newId, x, y, _circularError));
 
   for (int i = 0; i < n.keys().size() && i < n.vals().size(); i++)
   {
@@ -587,7 +587,7 @@ void PbfReader::_loadRelation(const hoot::pb::Relation& r)
 {
   long newId = _createRelationId(r.id());
 
-  shared_ptr<hoot::Relation> newRelation(new hoot::Relation(_status, newId, _circularError));
+  boost::shared_ptr<hoot::Relation> newRelation(new hoot::Relation(_status, newId, _circularError));
 
 
   if (r.roles_sid_size() != r.memids_size() || r.roles_sid_size() != r.types_size())
@@ -689,7 +689,7 @@ void PbfReader::_loadWay(const hoot::pb::Way& w)
 {
   long newId = _createWayId(w.id());
 
-  shared_ptr<hoot::Way> newWay(new hoot::Way(_status, newId, _circularError));
+  boost::shared_ptr<hoot::Way> newWay(new hoot::Way(_status, newId, _circularError));
 
   // if the cached envelope is valid
   if (w.has_bbox())
@@ -776,12 +776,12 @@ void PbfReader::_loadWays()
   }
 }
 
-void PbfReader::parseBlob(BlobLocation& bl, istream* strm, shared_ptr<OsmMap> map)
+void PbfReader::parseBlob(BlobLocation& bl, istream* strm, boost::shared_ptr<OsmMap> map)
 {
   parseBlob(bl.headerOffset, strm, map);
 }
 
-void PbfReader::parseBlob(long headerOffset, istream* strm, shared_ptr<OsmMap> map)
+void PbfReader::parseBlob(long headerOffset, istream* strm, boost::shared_ptr<OsmMap> map)
 {
   _in = strm;
   _map = map;
@@ -833,7 +833,7 @@ void PbfReader::_parseBlobHeader()
   _d->blobHeader.ParseFromArray(_buffer.data(), size);
 }
 
-void PbfReader::parseElements(istream* strm, const shared_ptr<OsmMap>& map)
+void PbfReader::parseElements(istream* strm, const boost::shared_ptr<OsmMap>& map)
 {
   _map = map;
   _in = strm;
@@ -920,7 +920,7 @@ Status PbfReader::_parseStatus(QString s)
   return result;
 }
 
-void PbfReader::parse(istream* strm, shared_ptr<OsmMap> map)
+void PbfReader::parse(istream* strm, boost::shared_ptr<OsmMap> map)
 {
   _in = strm;
   _map = map;
@@ -958,7 +958,7 @@ void PbfReader::parse(istream* strm, shared_ptr<OsmMap> map)
 }
 
 /// @todo this needs to be integrated with the OsmMapReader/PartialOsmMapReader interface somehow
-void PbfReader::read(QString path, shared_ptr<OsmMap> map)
+void PbfReader::read(QString path, boost::shared_ptr<OsmMap> map)
 {
   if (_status == Status::Invalid)
   {
@@ -986,7 +986,7 @@ void PbfReader::read(QString path, shared_ptr<OsmMap> map)
   map->visitRw(v);
 }
 
-void PbfReader::_readFile(QString path, shared_ptr<OsmMap> map)
+void PbfReader::_readFile(QString path, boost::shared_ptr<OsmMap> map)
 {
   fstream input(path.toUtf8().constData(), ios::in | ios::binary);
 
@@ -998,7 +998,7 @@ void PbfReader::_readFile(QString path, shared_ptr<OsmMap> map)
   parse(&input, map);
 }
 
-void PbfReader::read(shared_ptr<OsmMap> map)
+void PbfReader::read(boost::shared_ptr<OsmMap> map)
 {
   assert(map.get());
   if (_status == Status::Invalid)
@@ -1090,7 +1090,7 @@ bool PbfReader::hasMoreElements()
   return false;
 }
 
-shared_ptr<Element> PbfReader::readNextElement()
+boost::shared_ptr<Element> PbfReader::readNextElement()
 {
   if (!hasMoreElements())
   {
@@ -1144,7 +1144,7 @@ shared_ptr<Element> PbfReader::readNextElement()
   //read nodes, then ways, then relations
   //there's possibly a way to read the element in one code block instead of three...just wasn't
   //able to get it to work yet
-  shared_ptr<Element> element;
+  boost::shared_ptr<Element> element;
   if (_partialNodesRead < int(_map->getNodeMap().size()))
   {
     //LOG_DEBUG("node key: " + nodesItr.key());

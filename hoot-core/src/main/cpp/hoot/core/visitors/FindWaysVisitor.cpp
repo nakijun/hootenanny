@@ -37,7 +37,7 @@ FindWaysVisitor::FindWaysVisitor (ElementCriterion* pCrit):
   // Nothing
 }
 
-void FindWaysVisitor::visit(const shared_ptr<const Element>& e)
+void FindWaysVisitor::visit(const boost::shared_ptr<const Element>& e)
 {
   if (e->getElementType() == ElementType::Way)
   {
@@ -60,7 +60,7 @@ vector<long> FindWaysVisitor::findWays(const ConstOsmMapPtr& map, ElementCriteri
 
 vector<long> FindWaysVisitor::findWays(const ConstOsmMapPtr& map,
                                        ElementCriterion* pCrit,
-                                       shared_ptr<const Way> refWay,
+                                       boost::shared_ptr<const Way> refWay,
                                        Meters maxDistance,
                                        bool addError)
 {
@@ -69,7 +69,7 @@ vector<long> FindWaysVisitor::findWays(const ConstOsmMapPtr& map,
 
   for (size_t i = 0; i < close.size(); i++)
   {
-    const shared_ptr<const Way>& w = map->getWay(close[i]);
+    const boost::shared_ptr<const Way>& w = map->getWay(close[i]);
     if (pCrit->isSatisfied(w))
       result.push_back(w->getId());
   }

@@ -64,14 +64,14 @@ protected:
   Tgs::BigMap<long, long> _relationIdMap;
   Tgs::BigMap<long, long> _wayIdMap;
 
-  virtual shared_ptr<Node> _resultToNode(const QSqlQuery& resultIterator, OsmMap& map) = 0;
-  virtual shared_ptr<Way> _resultToWay(const QSqlQuery& resultIterator, OsmMap& map) = 0;
-  virtual shared_ptr<Relation> _resultToRelation(const QSqlQuery& resultIterator,
+  virtual boost::shared_ptr<Node> _resultToNode(const QSqlQuery& resultIterator, OsmMap& map) = 0;
+  virtual boost::shared_ptr<Way> _resultToWay(const QSqlQuery& resultIterator, OsmMap& map) = 0;
+  virtual boost::shared_ptr<Relation> _resultToRelation(const QSqlQuery& resultIterator,
                                                  const OsmMap& map) = 0;
 
   virtual ElementId _mapElementId(const OsmMap& map, ElementId oldId);
 
-  virtual shared_ptr<ApiDb> _getDatabase() const = 0;
+  virtual boost::shared_ptr<ApiDb> _getDatabase() const = 0;
 
   /*
    * This is based off of the Map.java query method.  Record paging to avoid OOM errors hasn't been

@@ -50,18 +50,18 @@ public:
 
   WayFilterChain();
 
-  WayFilterChain(shared_ptr<WayFilter> f1);
+  WayFilterChain(boost::shared_ptr<WayFilter> f1);
 
-  WayFilterChain(shared_ptr<WayFilter> f1, shared_ptr<WayFilter> f2);
+  WayFilterChain(boost::shared_ptr<WayFilter> f1, boost::shared_ptr<WayFilter> f2);
 
-  void addFilter(shared_ptr<WayFilter> f) { _filters.push_back(f); _filtersFast.push_back(f.get());}
+  void addFilter(boost::shared_ptr<WayFilter> f) { _filters.push_back(f); _filtersFast.push_back(f.get());}
 
-  virtual bool isFiltered(const shared_ptr<const Way>& w) const;
+  virtual bool isFiltered(const boost::shared_ptr<const Way>& w) const;
 
   void setAggregator(Aggregator a) { _aggregator = a; }
 
 private:
-  std::vector< shared_ptr<WayFilter> > _filters;
+  std::vector< boost::shared_ptr<WayFilter> > _filters;
   std::vector< WayFilter* > _filtersFast;
   Aggregator _aggregator;
 };

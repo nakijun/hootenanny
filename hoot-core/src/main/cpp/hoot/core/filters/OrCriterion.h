@@ -50,7 +50,7 @@ public:
   {
   }
 
-  virtual bool isSatisfied(const shared_ptr<const Element>& e) const
+  virtual bool isSatisfied(const boost::shared_ptr<const Element>& e) const
   {
     for (size_t i = 0; i < _filters.size(); i++)
     {

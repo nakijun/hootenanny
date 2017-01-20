@@ -183,7 +183,7 @@ public:
         VariableDescription::Real, 0.59, 0.59));
         //VariableDescription::Real, 0.5, 1.0));
 
-    shared_ptr<FitnessFunction> ff(new CaseFitnessFunction());
+    boost::shared_ptr<FitnessFunction> ff(new CaseFitnessFunction());
     SimulatedAnnealing sa(desc, ff);
 //#error modify fitness function to give variable failure based on the number of reviews
     sa.setPickFromBestScores(true);

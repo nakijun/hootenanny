@@ -62,7 +62,7 @@ private:
   OsmMap* _map;
   std::vector<long> _ids;
 
-  void _decomposeBuilding(const shared_ptr<Relation>& r);
+  void _decomposeBuilding(const boost::shared_ptr<Relation>& r);
 };
 
 }

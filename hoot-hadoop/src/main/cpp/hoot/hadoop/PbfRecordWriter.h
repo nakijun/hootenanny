@@ -47,11 +47,11 @@ public:
 
   virtual void emit(const string&, const string&);
 
-  void emitRecord(shared_ptr<OsmMap> map);
+  void emitRecord(boost::shared_ptr<OsmMap> map);
 
-  void emitRecord(const shared_ptr<const Node>& n);
+  void emitRecord(const boost::shared_ptr<const Node>& n);
 
-  void emitRecord(const shared_ptr<const Way>& w);
+  void emitRecord(const boost::shared_ptr<const Way>& w);
 
   PbfWriter& getPbfWriter() { return *_pbfWriter; }
 
@@ -68,7 +68,7 @@ public:
 private:
   PbfWriter* _pbfWriter;
   string _path;
-  shared_ptr<ostream> _out;
+  boost::shared_ptr<ostream> _out;
 };
 
 }

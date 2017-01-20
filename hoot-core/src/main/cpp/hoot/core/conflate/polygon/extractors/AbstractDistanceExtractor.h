@@ -53,8 +53,8 @@ public:
   static string className() { return "hoot::AbstractDistanceExtractor"; }
 
   virtual double combinedEnvelopeDiagonalDistance(const OsmMap& map,
-    const shared_ptr<const Element>& target,
-    const shared_ptr<const Element>& candidate) const
+    const boost::shared_ptr<const Element>& target,
+    const boost::shared_ptr<const Element>& candidate) const
   {
     ConstOsmMapPtr m = map.shared_from_this();
     auto_ptr<Envelope> env(target->getEnvelope(m));
@@ -63,11 +63,11 @@ public:
     return sqrt(env->getWidth() * env->getWidth() + env->getHeight() * env->getHeight());
   }
 
-  virtual double distance(const OsmMap& map, const shared_ptr<const Element>& target,
-    const shared_ptr<const Element>& candidate) const = 0;
+  virtual double distance(const OsmMap& map, const boost::shared_ptr<const Element>& target,
+    const boost::shared_ptr<const Element>& candidate) const = 0;
 
-  virtual double extract(const OsmMap& map, const shared_ptr<const Element>& target,
-    const shared_ptr<const Element>& candidate) const
+  virtual double extract(const OsmMap& map, const boost::shared_ptr<const Element>& target,
+    const boost::shared_ptr<const Element>& candidate) const
   {
     return 1 - distance(map, target, candidate) /
       combinedEnvelopeDiagonalDistance(map, target, candidate);

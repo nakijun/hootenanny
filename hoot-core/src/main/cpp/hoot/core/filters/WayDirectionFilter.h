@@ -45,14 +45,14 @@ namespace hoot
 class WayDirectionFilter : public WayFilter
 {
 public:
-  WayDirectionFilter(const ConstOsmMapPtr& map, shared_ptr<const Way> baseWay,
+  WayDirectionFilter(const ConstOsmMapPtr& map, boost::shared_ptr<const Way> baseWay,
     bool similarDirection = true);
 
-  virtual bool isFiltered(const shared_ptr<const Way>& w) const;
+  virtual bool isFiltered(const boost::shared_ptr<const Way>& w) const;
 
 private:
   ConstOsmMapPtr _map;
-  shared_ptr<const Way> _baseWay;
+  boost::shared_ptr<const Way> _baseWay;
   bool _similarDirection;
 };
 

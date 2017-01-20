@@ -56,7 +56,7 @@ using namespace hoot::elements;
 
 namespace hoot {
 
-shared_ptr<OGRSpatialReference> OsmMap::_wgs84;
+boost::shared_ptr<OGRSpatialReference> OsmMap::_wgs84;
 
 OsmMap::OsmMap()
 {
@@ -65,24 +65,24 @@ OsmMap::OsmMap()
   _srs = MapProjector::createWgs84Projection();
 }
 
-OsmMap::OsmMap(shared_ptr<const OsmMap> map)
+OsmMap::OsmMap(boost::shared_ptr<const OsmMap> map)
 {
   _copy(map);
 }
 
-OsmMap::OsmMap(shared_ptr<OsmMap> map)
+OsmMap::OsmMap(boost::shared_ptr<OsmMap> map)
 {
   _copy(map);
 }
 
-OsmMap::OsmMap(shared_ptr<OGRSpatialReference> srs)
+OsmMap::OsmMap(boost::shared_ptr<OGRSpatialReference> srs)
 {
   setIdGenerator(IdGenerator::getInstance());
   _index.reset(new OsmMapIndex(*this));
   _srs = srs;
 }
 
-OsmMap::OsmMap(shared_ptr<const OsmMap> map, shared_ptr<OGRSpatialReference> srs)
+OsmMap::OsmMap(boost::shared_ptr<const OsmMap> map, boost::shared_ptr<OGRSpatialReference> srs)
 {
   _copy(map);
   _srs = srs;
@@ -120,7 +120,7 @@ void OsmMap::append(ConstOsmMapPtr appendFromMap)
     {
       throw HootException("Map already contains this relation: " + relation->toString());
     }
-    shared_ptr<Relation> r = shared_ptr<Relation>(new Relation(*relation));
+    boost::shared_ptr<Relation> r = boost::shared_ptr<Relation>(new Relation(*relation));
     addRelation(r);
   }
 
@@ -132,7 +132,7 @@ void OsmMap::append(ConstOsmMapPtr appendFromMap)
     {
       throw HootException("Map already contains this way: " + way->toString());
     }
-    shared_ptr<Way> w = shared_ptr<Way>(new Way(*way));
+    boost::shared_ptr<Way> w = boost::shared_ptr<Way>(new Way(*way));
     addWay(w);
     ++it;
   }
@@ -152,12 +152,12 @@ void OsmMap::append(ConstOsmMapPtr appendFromMap)
 
   for (size_t i = 0; i < appendFromMap->getListeners().size(); i++)
   {
-    shared_ptr<OsmMapListener> l = appendFromMap->getListeners()[i];
+    boost::shared_ptr<OsmMapListener> l = appendFromMap->getListeners()[i];
     _listeners.push_back(l->clone());
   }
 }
 
-void OsmMap::addElement(const shared_ptr<Element>& e)
+void OsmMap::addElement(const boost::shared_ptr<Element>& e)
 {
   switch(e->getElementType().getEnum())
   {
@@ -184,7 +184,7 @@ void OsmMap::addNode(const boost::shared_ptr<Node>& n)
   //_nodeCounter = std::min(n->getId() - 1, _nodeCounter);
 }
 
-void OsmMap::addRelation(const shared_ptr<Relation>& r)
+void OsmMap::addRelation(const boost::shared_ptr<Relation>& r)
 {
   VALIDATE(validate());
   _idGen->ensureRelationBounds(r->getId());
@@ -194,7 +194,7 @@ void OsmMap::addRelation(const shared_ptr<Relation>& r)
   VALIDATE(validate());
 }
 
-void OsmMap::addWay(const shared_ptr<Way>& w)
+void OsmMap::addWay(const boost::shared_ptr<Way>& w)
 {
   _idGen->ensureWayBounds(w->getId());
   _ways[w->getId()] = w;
@@ -243,7 +243,7 @@ bool OsmMap::containsElement(ElementType type, long id) const
   }
 }
 
-bool OsmMap::containsElement(const shared_ptr<const Element>& e) const
+bool OsmMap::containsElement(const boost::shared_ptr<const Element>& e) const
 {
   return containsElement(e->getElementType(), e->getId());
 }
@@ -259,7 +259,7 @@ void OsmMap::_copy(boost::shared_ptr<const OsmMap> from)
   const RelationMap& allRelations = from->getRelationMap();
   for (RelationMap::const_iterator it = allRelations.begin(); it != allRelations.end(); ++it)
   {
-    shared_ptr<Relation> r = shared_ptr<Relation>(new Relation(*(it->second)));
+    boost::shared_ptr<Relation> r = boost::shared_ptr<Relation>(new Relation(*(it->second)));
     r->registerListener(_index.get());
     _relations[it->first] = r;
     // no need to add it to the index b/c the index is created in a lazy fashion.
@@ -269,7 +269,7 @@ void OsmMap::_copy(boost::shared_ptr<const OsmMap> from)
   WayMap::const_iterator it = from->_ways.begin();
   while (it != from->_ways.end())
   {
-    shared_ptr<Way> w = shared_ptr<Way>(new Way(*(it->second)));
+    boost::shared_ptr<Way> w = boost::shared_ptr<Way>(new Way(*(it->second)));
     w->registerListener(_index.get());
     _ways[it->first] = w;
     // no need to add it to the index b/c the index is created in a lazy fashion.
@@ -279,14 +279,14 @@ void OsmMap::_copy(boost::shared_ptr<const OsmMap> from)
   NodeMap::const_iterator itn = from->_nodes.begin();
   while (itn != from->_nodes.end())
   {
-    _nodes[itn->first] = shared_ptr<Node>(new Node(*itn->second));
+    _nodes[itn->first] = boost::shared_ptr<Node>(new Node(*itn->second));
     // no need to add it to the index b/c the index is created in a lazy fashion.
     ++itn;
   }
 
   for (size_t i = 0; i < from->getListeners().size(); i++)
   {
-    shared_ptr<OsmMapListener> l = from->getListeners()[i];
+    boost::shared_ptr<OsmMapListener> l = from->getListeners()[i];
     _listeners.push_back(l->clone());
   }
 }
@@ -354,9 +354,9 @@ bool OsmMap::_listContainsNode(const QList<ElementPtr> l) const
   return false;
 }
 
-void OsmMap::replace(const shared_ptr<const Element>& from, const shared_ptr<Element>& to)
+void OsmMap::replace(const boost::shared_ptr<const Element>& from, const boost::shared_ptr<Element>& to)
 {
-  const shared_ptr<NodeToWayMap>& n2w = getIndex().getNodeToWayMap();
+  const boost::shared_ptr<NodeToWayMap>& n2w = getIndex().getNodeToWayMap();
 
   // do some error checking before we add the new element.
   if (from->getElementType() == ElementType::Node && to->getElementType() != ElementType::Node)
@@ -383,7 +383,7 @@ void OsmMap::replace(const shared_ptr<const Element>& from, const shared_ptr<Ele
     const set<long> rids = getIndex().getElementToRelationMap()->getRelationByElement(from.get());
     for (set<long>::const_iterator it = rids.begin(); it != rids.end(); it++)
     {
-      const shared_ptr<Relation>& r = getRelation(*it);
+      const boost::shared_ptr<Relation>& r = getRelation(*it);
       r->replaceElement(from, to);
     }
 
@@ -391,9 +391,9 @@ void OsmMap::replace(const shared_ptr<const Element>& from, const shared_ptr<Ele
   }
 }
 
-void OsmMap::replace(const shared_ptr<const Element>& from, const QList<ElementPtr>& to)
+void OsmMap::replace(const boost::shared_ptr<const Element>& from, const QList<ElementPtr>& to)
 {
-  const shared_ptr<NodeToWayMap>& n2w = getIndex().getNodeToWayMap();
+  const boost::shared_ptr<NodeToWayMap>& n2w = getIndex().getNodeToWayMap();
 
   // do some error checking before we add the new element.
   if (from->getElementType() == ElementType::Node &&
@@ -425,7 +425,7 @@ void OsmMap::replace(const shared_ptr<const Element>& from, const QList<ElementP
     const set<long> rids = getIndex().getElementToRelationMap()->getRelationByElement(from.get());
     for (set<long>::const_iterator it = rids.begin(); it != rids.end(); it++)
     {
-      const shared_ptr<Relation>& r = getRelation(*it);
+      const boost::shared_ptr<Relation>& r = getRelation(*it);
       r->replaceElement(from, to);
     }
 
@@ -446,7 +446,7 @@ void OsmMap::replaceNode(long oldId, long newId)
     _listeners[i]->replaceNodePre(oldId, newId);
   }
 
-  const shared_ptr<NodeToWayMap>& n2w = getIndex().getNodeToWayMap();
+  const boost::shared_ptr<NodeToWayMap>& n2w = getIndex().getNodeToWayMap();
 
   // get a copy of the ways so our changes below don't modify the working set.
   const set<long> ways = n2w->getWaysByNode(oldId);
@@ -455,7 +455,7 @@ void OsmMap::replaceNode(long oldId, long newId)
 
   for (set<long>::iterator it = ways.begin(); it != ways.end(); it++)
   {
-    const shared_ptr<Way>& w = getWay(*it);
+    const boost::shared_ptr<Way>& w = getWay(*it);
 
 
 #   ifdef DEBUG
@@ -479,7 +479,7 @@ void OsmMap::replaceNode(long oldId, long newId)
   VALIDATE(getIndex().getNodeToWayMap()->validate(*this));
 }
 
-void OsmMap::setProjection(shared_ptr<OGRSpatialReference> srs)
+void OsmMap::setProjection(boost::shared_ptr<OGRSpatialReference> srs)
 {
   _srs = srs;
   _index->reset();
@@ -493,7 +493,7 @@ bool OsmMap::validate(bool strict) const
   const WayMap& allWays = (*this).getWays();
   for (WayMap::const_iterator it = allWays.begin(); it != allWays.end(); ++it)
   {
-    const shared_ptr<const Way>& way = it->second;
+    const boost::shared_ptr<const Way>& way = it->second;
 
     const vector<long>& nids = way->getNodeIds();
     vector<long> missingNodes;
@@ -518,7 +518,7 @@ bool OsmMap::validate(bool strict) const
   const RelationMap& allRelations = getRelationMap();
   for (RelationMap::const_iterator it = allRelations.begin(); it != allRelations.end(); ++it)
   {
-    const shared_ptr<const Relation>& relation = it->second;
+    const boost::shared_ptr<const Relation>& relation = it->second;
 
     const vector<RelationData::Entry>& members = relation->getMembers();
     vector<RelationData::Entry> missingElements;

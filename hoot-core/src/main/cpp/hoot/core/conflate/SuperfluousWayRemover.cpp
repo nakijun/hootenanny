@@ -43,13 +43,13 @@ SuperfluousWayRemover::SuperfluousWayRemover()
 
 }
 
-SuperfluousWayRemover::SuperfluousWayRemover(shared_ptr<OsmMap> map)
+SuperfluousWayRemover::SuperfluousWayRemover(boost::shared_ptr<OsmMap> map)
 {
   _inputMap = map;
 }
 
 
-void SuperfluousWayRemover::removeWays(shared_ptr<OsmMap> map)
+void SuperfluousWayRemover::removeWays(boost::shared_ptr<OsmMap> map)
 {
   SuperfluousWayRemover swr(map);
   return swr.removeWays();
@@ -59,13 +59,13 @@ void SuperfluousWayRemover::removeWays()
 {
   LOG_INFO("Removing superfluous ways...");
 
-  shared_ptr<ElementToRelationMap> e2r = _inputMap->getIndex().getElementToRelationMap();
+  boost::shared_ptr<ElementToRelationMap> e2r = _inputMap->getIndex().getElementToRelationMap();
 
   // make a copy of the ways to avoid issues when removing.
   const WayMap ways = _inputMap->getWays();
   for (WayMap::const_iterator it = ways.begin(); it != ways.end(); ++it)
   {
-    const shared_ptr<const Way>& w = it->second;
+    const boost::shared_ptr<const Way>& w = it->second;
 
     bool same = true;
     long firstId;
@@ -93,7 +93,7 @@ void SuperfluousWayRemover::removeWays()
   }
 }
 
-void SuperfluousWayRemover::apply(shared_ptr<OsmMap>& map)
+void SuperfluousWayRemover::apply(boost::shared_ptr<OsmMap>& map)
 {
   removeWays(map);
 }

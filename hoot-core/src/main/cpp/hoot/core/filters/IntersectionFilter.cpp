@@ -40,7 +40,7 @@ IntersectionFilter::IntersectionFilter(std::vector<long> ids)
   }
 }
 
-bool IntersectionFilter::isSatisfied(const shared_ptr<const Element>& e) const
+bool IntersectionFilter::isSatisfied(const boost::shared_ptr<const Element>& e) const
 
 //bool IntersectionFilter::isFiltered(const Element& e) const
 {

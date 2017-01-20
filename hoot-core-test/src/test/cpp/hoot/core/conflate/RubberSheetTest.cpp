@@ -69,7 +69,7 @@ public:
     {
       OsmReader reader;
       OsmMap::resetCounters();
-      shared_ptr<OsmMap> map(new OsmMap());
+      boost::shared_ptr<OsmMap> map(new OsmMap());
       reader.setDefaultStatus(Status::Unknown1);
       reader.read("test-files/DcGisRoads.osm", map);
       reader.setDefaultStatus(Status::Unknown2);
@@ -95,7 +95,7 @@ public:
     {
       OsmReader reader;
       OsmMap::resetCounters();
-      shared_ptr<OsmMap> map(new OsmMap());
+      boost::shared_ptr<OsmMap> map(new OsmMap());
       reader.setDefaultStatus(Status::Unknown1);
       reader.read("test-files/DcGisRoads.osm", map);
       reader.setDefaultStatus(Status::Unknown2);
@@ -132,7 +132,7 @@ public:
   {
     OsmReader reader;
     OsmMap::resetCounters();
-    shared_ptr<OsmMap> map(new OsmMap());
+    boost::shared_ptr<OsmMap> map(new OsmMap());
     reader.setDefaultStatus(Status::Unknown1);
     reader.read("test-files/DcGisRoads.osm", map);
     reader.setDefaultStatus(Status::Unknown2);

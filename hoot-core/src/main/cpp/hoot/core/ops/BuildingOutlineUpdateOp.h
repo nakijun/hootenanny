@@ -51,7 +51,7 @@ public:
 
   BuildingOutlineUpdateOp();
 
-  virtual void apply(shared_ptr<OsmMap>& map);
+  virtual void apply(boost::shared_ptr<OsmMap>& map);
 
   virtual string getClassName() const { return className(); }
 
@@ -60,18 +60,18 @@ public:
   virtual void writeObject(QDataStream& /*os*/) const {}
 
 private:
-  shared_ptr<OsmMap> _map;
+  boost::shared_ptr<OsmMap> _map;
 
-  void _createOutline(const shared_ptr<Relation>& building);
+  void _createOutline(const boost::shared_ptr<Relation>& building);
 
-  void _extractUsedNodes(const shared_ptr<Relation>& r, set<long>& nodes);
+  void _extractUsedNodes(const boost::shared_ptr<Relation>& r, set<long>& nodes);
 
   /**
    * Match nodes in change to nodes in reference. If there is an exact node match then change
    * "changed" by replacing the nodes with the equivalent nodes in reference.
    */
-  void _mergeNodes(const shared_ptr<Element>& changed,
-    const shared_ptr<Relation>& reference);
+  void _mergeNodes(const boost::shared_ptr<Element>& changed,
+    const boost::shared_ptr<Relation>& reference);
 };
 
 }

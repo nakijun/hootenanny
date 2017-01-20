@@ -66,7 +66,7 @@ public:
   /**
    * @brief Reads data samples from the given input stream.
    */
-  shared_ptr<DataSamples> read();
+  boost::shared_ptr<DataSamples> read();
 
 private:
   auto_ptr<fstream> _autoStrm;

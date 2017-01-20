@@ -27,6 +27,11 @@
 #ifndef MAXIMALSUBLINE_H
 #define MAXIMALSUBLINE_H
 
+// OpenCV
+#define int64 opencv_broken_int
+#include <hoot/core/util/OpenCv.h>
+#undef int64
+
 // geos
 #include <geos/geom/LineSegment.h>
 
@@ -37,8 +42,6 @@
 
 #include "Sparse2dMatrix.h"
 
-// OpenCV
-#include <opencv/cv.h>
 
 namespace hoot
 {

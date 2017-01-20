@@ -18,7 +18,10 @@
 #define PAINTNODESDRIVER_H
 
 // Hoot
+#define int64 opencv_broken_int
 #include <hoot/core/util/OpenCv.h>
+#undef int64
+
 #include <hoot/hadoop/Driver.h>
 
 // Qt

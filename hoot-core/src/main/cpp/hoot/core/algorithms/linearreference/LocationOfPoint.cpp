@@ -42,7 +42,7 @@
 
 namespace hoot {
 
-LocationOfPoint::LocationOfPoint(const ConstOsmMapPtr& map, shared_ptr<const Way> way) :
+LocationOfPoint::LocationOfPoint(const ConstOsmMapPtr& map, boost::shared_ptr<const Way> way) :
   _map(map),
   _way(way)
 {
@@ -97,7 +97,7 @@ Coordinate LocationOfPoint::locate(double d)
   return result;
 }
 
-WayLocation LocationOfPoint::locate(const ConstOsmMapPtr& map, shared_ptr<const Way> way,
+WayLocation LocationOfPoint::locate(const ConstOsmMapPtr& map, boost::shared_ptr<const Way> way,
   const Coordinate& inputPt)
 {
   LocationOfPoint locater(map, way);

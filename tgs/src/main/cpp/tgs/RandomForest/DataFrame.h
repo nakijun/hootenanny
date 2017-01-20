@@ -31,6 +31,7 @@
 //Qt Includes
 #include <QDomDocument>
 #include <QDomElement>
+#include <qnumeric.h>
 
 //Std Includes
 #include <limits>

@@ -52,7 +52,7 @@ class NodeToWayMap : public map<long, set<long> >
 public:
   NodeToWayMap(const OsmMap& map);
 
-  void addWay(shared_ptr<const Way> w);
+  void addWay(boost::shared_ptr<const Way> w);
 
   /**
    * Returns all the ways that use the given node ID. If the given node ID isn't found an empty
@@ -63,7 +63,7 @@ public:
   /**
    * This function assumes that the nodes in the way haven't changed since it was last added.
    */
-  void removeWay(shared_ptr<const Way> w);
+  void removeWay(boost::shared_ptr<const Way> w);
 
   bool validate(const OsmMap& map);
 

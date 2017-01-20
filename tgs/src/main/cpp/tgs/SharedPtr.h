@@ -24,8 +24,8 @@
  *
  * @copyright Copyright (C) 2015 DigitalGlobe (http://www.digitalglobe.com/)
  */
-#ifndef __SHARED_PTR_H__
-#define __SHARED_PTR_H__
+#ifndef __shared_ptr_H__
+#define __shared_ptr_H__
 
 #include <boost/shared_ptr.hpp>
 #include <boost/weak_ptr.hpp>

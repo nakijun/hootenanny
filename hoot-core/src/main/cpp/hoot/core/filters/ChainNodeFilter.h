@@ -51,18 +51,18 @@ public:
 
   ChainNodeFilter();
 
-  ChainNodeFilter(shared_ptr<NodeFilter> f1);
+  ChainNodeFilter(boost::shared_ptr<NodeFilter> f1);
 
-  ChainNodeFilter(shared_ptr<NodeFilter> f1, shared_ptr<NodeFilter> f2);
+  ChainNodeFilter(boost::shared_ptr<NodeFilter> f1, boost::shared_ptr<NodeFilter> f2);
 
-  void addFilter(shared_ptr<NodeFilter> f) { _filters.push_back(f); _filtersFast.push_back(f.get());}
+  void addFilter(boost::shared_ptr<NodeFilter> f) { _filters.push_back(f); _filtersFast.push_back(f.get());}
 
-  virtual bool isFiltered(const shared_ptr<const Node>& n) const;
+  virtual bool isFiltered(const boost::shared_ptr<const Node>& n) const;
 
   void setAggregator(Aggregator a) { _aggregator = a; }
 
 private:
-  std::vector< shared_ptr<NodeFilter> > _filters;
+  std::vector< boost::shared_ptr<NodeFilter> > _filters;
   std::vector< NodeFilter* > _filtersFast;
   Aggregator _aggregator;
 };

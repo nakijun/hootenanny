@@ -94,7 +94,7 @@ public:
    * @param map Put what we read in this map.
    * @param progress Report progress to this object.
    */
-  void read(QString path, QString layer, shared_ptr<OsmMap> map, Progress progress);
+  void read(QString path, QString layer, boost::shared_ptr<OsmMap> map, Progress progress);
 
   void setDefaultCircularError(Meters circularError);
 
@@ -128,7 +128,7 @@ public:
    * Returns the bounding box for the specified projection and configuration settings. This is
    * likely only useful in unit tests.
    */
-  virtual shared_ptr<Envelope> getBoundingBoxFromConfig(const Settings& s,
+  virtual boost::shared_ptr<Envelope> getBoundingBoxFromConfig(const Settings& s,
     OGRSpatialReference* srs);
 
   virtual boost::shared_ptr<OGRSpatialReference> getProjection() const;

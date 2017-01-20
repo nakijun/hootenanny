@@ -47,7 +47,7 @@ namespace hoot
 {
 
 ParallelWayCriterion::ParallelWayCriterion(const ConstOsmMapPtr& map,
-                                           shared_ptr<const Way> baseWay,
+                                           boost::shared_ptr<const Way> baseWay,
                                            bool isParallel) :
   _map(map),
   _baseWay(baseWay),
@@ -85,9 +85,9 @@ ParallelWayCriterion::~ParallelWayCriterion()
   }
 }
 
-Radians ParallelWayCriterion::calculateDifference(const shared_ptr<const Way>& w) const
+Radians ParallelWayCriterion::calculateDifference(const boost::shared_ptr<const Way>& w) const
 {
-  shared_ptr<LineString> ls = ElementConverter(_map).convertToLineString(w);
+  boost::shared_ptr<LineString> ls = ElementConverter(_map).convertToLineString(w);
 
   Radians deltaSum = 0.0;
   int count = 0;
@@ -127,7 +127,7 @@ Radians ParallelWayCriterion::calculateDifference(const shared_ptr<const Way>& w
   }
 }
 
-bool ParallelWayCriterion::isSatisfied(const shared_ptr<const Element> &e) const
+bool ParallelWayCriterion::isSatisfied(const boost::shared_ptr<const Element> &e) const
 {
   if(e->getElementType() == ElementType::Way)
   {

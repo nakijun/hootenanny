@@ -54,7 +54,7 @@ public:
   {
     bool result = false;
 
-    const shared_ptr<ElementToRelationMap> & e2r = _map->getIndex().getElementToRelationMap();
+    const boost::shared_ptr<ElementToRelationMap> & e2r = _map->getIndex().getElementToRelationMap();
     const set<long>& parents = e2r->getRelationByElement(eid);
     for (set<long>::const_iterator it = parents.begin(); it != parents.end() && result == false;
       it++)
@@ -73,7 +73,7 @@ public:
     return result;
   }
 
-  bool isSatisfied(const shared_ptr<const Element> &e) const
+  bool isSatisfied(const boost::shared_ptr<const Element> &e) const
   {
     bool result = false;
 

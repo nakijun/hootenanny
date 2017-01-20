@@ -66,15 +66,15 @@ public:
 
   MapCropper(const Envelope& envelope);
 
-  MapCropper(const shared_ptr<const Geometry>& g, bool invert);
+  MapCropper(const boost::shared_ptr<const Geometry>& g, bool invert);
 
-  virtual void apply(shared_ptr<OsmMap>& map);
+  virtual void apply(boost::shared_ptr<OsmMap>& map);
 
   virtual void setConfiguration(const Settings& conf);
 
-  static void crop(shared_ptr<OsmMap> map, const Envelope& envelope);
+  static void crop(boost::shared_ptr<OsmMap> map, const Envelope& envelope);
 
-  static void crop(shared_ptr<OsmMap> map, const shared_ptr<const Geometry>& g,
+  static void crop(boost::shared_ptr<OsmMap> map, const boost::shared_ptr<const Geometry>& g,
     bool invert);
 
   virtual string getClassName() const { return className(); }
@@ -91,19 +91,19 @@ public:
 
 private:
   Envelope _envelope;
-  shared_ptr<const Geometry> _envelopeG;
+  boost::shared_ptr<const Geometry> _envelopeG;
   bool _invert;
   bool _removeNodes;
   Envelope _nodeBounds;
 
-  void _cropWay(shared_ptr<OsmMap> map, long wid);
+  void _cropWay(boost::shared_ptr<OsmMap> map, long wid);
 
 
   /**
    * Finds the node with coordinate c. Throws an exception if multiple nodes are found with the
    * same coordinate. If no node is found then numeric_limits<long>::max() is returned.
    */
-  long _findNodeId(shared_ptr<const OsmMap> map, shared_ptr<const Way> w, const Coordinate& c);
+  long _findNodeId(boost::shared_ptr<const OsmMap> map, boost::shared_ptr<const Way> w, const Coordinate& c);
 
   /**
    * Returns true if the specified envelope is wholly inside the region that will be kept. If
@@ -121,7 +121,7 @@ private:
    */
   bool _isWhollyOutside(const Envelope& e);
 
-  shared_ptr<Way> _reintroduceWay(shared_ptr<OsmMap> map, shared_ptr<const Way> w,
+  boost::shared_ptr<Way> _reintroduceWay(boost::shared_ptr<OsmMap> map, boost::shared_ptr<const Way> w,
     const LineString* ls);
 
   friend class MapCropperTest;

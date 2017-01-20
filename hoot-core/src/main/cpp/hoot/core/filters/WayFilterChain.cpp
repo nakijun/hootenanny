@@ -38,20 +38,20 @@ WayFilterChain::WayFilterChain()
   _aggregator = Or;
 }
 
-WayFilterChain::WayFilterChain(shared_ptr<WayFilter> f1)
+WayFilterChain::WayFilterChain(boost::shared_ptr<WayFilter> f1)
 {
   addFilter(f1);
   _aggregator = Or;
 }
 
-WayFilterChain::WayFilterChain(shared_ptr<WayFilter> f1, shared_ptr<WayFilter> f2)
+WayFilterChain::WayFilterChain(boost::shared_ptr<WayFilter> f1, boost::shared_ptr<WayFilter> f2)
 {
   addFilter(f1);
   addFilter(f2);
   _aggregator = Or;
 }
 
-bool WayFilterChain::isFiltered(const shared_ptr<const Way>& w) const
+bool WayFilterChain::isFiltered(const boost::shared_ptr<const Way>& w) const
 {
   if (_aggregator == Or)
   {

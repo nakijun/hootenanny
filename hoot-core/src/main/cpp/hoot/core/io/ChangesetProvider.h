@@ -131,7 +131,7 @@ public:
 
 };
 
-typedef shared_ptr<ChangeSetProvider> ChangeSetProviderPtr;
+typedef boost::shared_ptr<ChangeSetProvider> ChangeSetProviderPtr;
 
 }
 

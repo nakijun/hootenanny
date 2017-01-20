@@ -121,10 +121,10 @@ public:
   WayStringPtr toWayString(ConstEdgeStringPtr e, const EidMapper& mapper = EidMapper()) const;
 
 private:
-  shared_ptr<HighwayClassifier> _classifier;
+  boost::shared_ptr<HighwayClassifier> _classifier;
   ConstOsmMapPtr _map;
   ConstOsmNetworkPtr _n1, _n2;
-  shared_ptr<SublineStringMatcher> _sublineMatcher;
+  boost::shared_ptr<SublineStringMatcher> _sublineMatcher;
   LegacyVertexMatcherPtr _vertexMatcher;
 
   class SublineCache
@@ -154,8 +154,8 @@ private:
   EdgeSublinePtr _toEdgeSubline(const WaySubline& ws, ConstNetworkEdgePtr);
 };
 
-typedef shared_ptr<NetworkDetails> NetworkDetailsPtr;
-typedef shared_ptr<const NetworkDetails> ConstNetworkDetailsPtr;
+typedef boost::shared_ptr<NetworkDetails> NetworkDetailsPtr;
+typedef boost::shared_ptr<const NetworkDetails> ConstNetworkDetailsPtr;
 
 // not implemented
 bool operator<(ConstNetworkDetailsPtr, ConstNetworkDetailsPtr);

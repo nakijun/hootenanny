@@ -46,7 +46,7 @@ bool VectorFeatureProvider::hasNext()
     return _index != _v.size();
 }
 
-shared_ptr<OGRFeature> VectorFeatureProvider::next()
+boost::shared_ptr<OGRFeature> VectorFeatureProvider::next()
 {
     return _v[_index++];
 }

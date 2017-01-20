@@ -40,7 +40,7 @@ HighwayReviewCleanerOp::HighwayReviewCleanerOp()
 {
 }
 
-void HighwayReviewCleanerOp::apply(shared_ptr<OsmMap>& map)
+void HighwayReviewCleanerOp::apply(boost::shared_ptr<OsmMap>& map)
 {
   RelationMap relations = map->getRelationMap();
 
@@ -62,7 +62,7 @@ void HighwayReviewCleanerOp::apply(shared_ptr<OsmMap>& map)
   }
 }
 
-bool HighwayReviewCleanerOp::_isBadHighwayReview(shared_ptr<OsmMap>& map,
+bool HighwayReviewCleanerOp::_isBadHighwayReview(boost::shared_ptr<OsmMap>& map,
   ReviewMarker::ReviewUid review)
 {
   if (ReviewMarker::getReviewType(map, review) == HighwayMatch::getHighwayMatchName())

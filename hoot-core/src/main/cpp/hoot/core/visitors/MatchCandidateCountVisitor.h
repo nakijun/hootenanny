@@ -47,9 +47,9 @@ public:
 
   static string className() { return "hoot::MatchCandidateCountVisitor"; }
 
-  MatchCandidateCountVisitor(const vector< shared_ptr<MatchCreator> >& matchCreators);
+  MatchCandidateCountVisitor(const vector< boost::shared_ptr<MatchCreator> >& matchCreators);
 
-  virtual void visit(const shared_ptr<const Element>& e);
+  virtual void visit(const boost::shared_ptr<const Element>& e);
 
   double getStat() const { return _candidateCount; }
 
@@ -57,11 +57,11 @@ public:
 
 private:
 
-  QMap<QString, shared_ptr<MatchCreator> > _matchCreatorsByName;
+  QMap<QString, boost::shared_ptr<MatchCreator> > _matchCreatorsByName;
   long _candidateCount;
   QMap<QString, long> _matchCandidateCountsByMatchCreator;
 
-  void _setupCreators(const vector< shared_ptr<MatchCreator> >& matchCreators);
+  void _setupCreators(const vector< boost::shared_ptr<MatchCreator> >& matchCreators);
 };
 
 }

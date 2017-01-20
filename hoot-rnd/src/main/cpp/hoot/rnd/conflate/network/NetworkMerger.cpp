@@ -120,7 +120,7 @@ void NetworkMerger::apply(const OsmMapPtr& map,
     QList<ConstNodePtr> scrapNodeList;
     ExtractNodesVisitor extractVisitor(scrapNodeList);
     str2->visitRo(*map, extractVisitor);
-    shared_ptr<NodeToWayMap> n2w = map->getIndex().getNodeToWayMap();
+    boost::shared_ptr<NodeToWayMap> n2w = map->getIndex().getNodeToWayMap();
     QSet<ConstNodePtr> scrapNodeSet = QSet<ConstNodePtr>::fromList(scrapNodeList);
     foreach (ConstNodePtr n, scrapNodeSet)
     {
