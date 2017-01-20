@@ -41,6 +41,7 @@ Vagrant.configure(2) do |config|
 
 
   # Ubuntu1404 Box
+  # This is the standard, working box
   config.vm.define "hoot_ubuntu1404", primary: true do |hoot_ubuntu1404|
     hoot_ubuntu1404.vm.box = "ubuntu/trusty64"
     hoot_ubuntu1404.vm.box_url = "https://atlas.hashicorp.com/ubuntu/boxes/trusty64"
@@ -54,8 +55,24 @@ Vagrant.configure(2) do |config|
     hoot_ubuntu1404.vm.provision "hadoop", type: "shell", :privileged => false, :inline => "stop-all.sh && start-all.sh", run: "always"
   end
 
+  # Ubuntu1604 Box
+  # For testing before we upgrade from Ubuntu1404
+  config.vm.define "hoot_ubuntu1604", autostart: false do |hoot_ubuntu1604|
+    hoot_ubuntu1604.vm.box = "ubuntu/xenial64"
+    hoot_ubuntu1604.vm.box_url = "https://atlas.hashicorp.com/ubuntu/boxes/xenial64"
+
+    hoot_ubuntu1604.vm.synced_folder ".", "/home/vagrant/hoot"
+
+    hoot_ubuntu1604.vm.provision "hoot", type: "shell", :privileged => false, :path => "VagrantProvisionUbuntu1404.sh"
+    hoot_ubuntu1604.vm.provision "build", type: "shell", :privileged => false, :path => "VagrantBuild.sh"
+    hoot_ubuntu1604.vm.provision "tomcat", type: "shell", :privileged => false, :inline => "sudo service tomcat8 restart", run: "always"
+    hoot_ubuntu1604.vm.provision "mapnik", type: "shell", :privileged => false, :inline => "sudo service node-mapnik-server start", run: "always"
+    hoot_ubuntu1604.vm.provision "hadoop", type: "shell", :privileged => false, :inline => "stop-all.sh && start-all.sh", run: "always"
+  end
+
 
   # Centos7 box
+  # For testing
   config.vm.define "hoot_centos7", autostart: false do |hoot_centos7|
     hoot_centos7.vm.box = "centos/7"
     hoot_centos7.vm.box_url = "https://atlas.hashicorp.com/centos/boxes/7"
