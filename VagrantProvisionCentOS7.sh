@@ -44,29 +44,39 @@ if  ! rpm -qa | grep jdk-8u111-linux; then
     sudo yum -y install ./jdk-8u111-linux-x64.rpm
 fi
 
+echo "### Installing the repo for an ancient version of NodeJS"
+curl --silent --location https://rpm.nodesource.com/setup | sudo bash -
+
+echo "### Installing an ancient version of NodeJS"
+sudo yum install -y \
+  nodejs-0.10.46 \
+  nodejs-devel-0.10.46
 
 # install useful and needed packages for working with hootenanny
 echo "### Installing dependencies from repos..."
 sudo yum -y install \
-    automake \
     autoconf \
+    automake \
+    bc \
     boost-devel \
     ccache \
+    cppunit-devel \
     gcc \
     gcc-c++ \
-    cppunit-devel \
     gdb \
+    geos-devel \
     git \
     git-core \
-    geos-devel \
+    glpk \
+    glpk-devel \
+    libicu-devel \
     libtool \
     m4 \
-    nodejs \
-    nodejs-devel \
-    npm \
-    qt \
-    qt-common \
-    qt-devel \
+    maven \
+    opencv \
+    opencv-core \
+    opencv-devel \
+    opencv-python \
     postgis2_95 \
     postgresql95 \
     postgresql95-contrib \
@@ -74,29 +84,23 @@ sudo yum -y install \
     postgresql95-server \
     proj \
     proj-devel \
-    stxxl \
-    stxxl-devel \
+    protobuf \
+    protobuf-compiler \
+    protobuf-devel \
     python  \
     python-devel \
     python-matplotlib \
     python-pip  \
     python-setuptools \
-    opencv \
-    opencv-core \
-    opencv-devel \
-    opencv-python \
-    protobuf \
-    protobuf-compiler \
-    protobuf-devel \
-    libicu-devel \
-    maven \
-    glpk \
-    glpk-devel \
+    qt \
+    qt-common \
+    qt-devel \
+    qt-postgresql \
+    stxxl \
+    stxxl-devel \
     v8 \
     v8-devel \
-
-
-
+    words
 
 echo "##### Temp installs #####"
 sudo yum -y install \
@@ -622,15 +626,17 @@ exit
         echo "### Extracting GDAL source..."
         tar zxfp gdal-1.10.1.tar.gz
     fi
-    if [ ! -f FileGDB_API_1_3-64.tar.gz ]; then
+
+    if [ ! -f FileGDB_API_1_4-64.tar.gz ]; then
         echo "### Downloading FileGDB API source..."
-        wget --quiet http://downloads2.esri.com/Software/FileGDB_API_1_3-64.tar.gz
+        wget --quiet https://github.com/Esri/file-geodatabase-api/raw/master/FileGDB_API_1_4-64.tar.gz
     fi
     if [ ! -d /usr/local/FileGDB_API ]; then
         echo "### Extracting FileGDB API source & installing lib..."
-        sudo tar xfp FileGDB_API_1_3-64.tar.gz --directory /usr/local
+        sudo mkdir -p /usr/local/FileGDB_API && sudo tar xfp FileGDB_API_1_4-64.tar.gz --directory /usr/local/FileGDB_API --strip-components 1
         sudo sh -c "echo '/usr/local/FileGDB_API/lib' > /etc/ld.so.conf.d/filegdb.conf"
     fi
+
 
     # compile gdal
     echo "### Building GDAL w/ FileGDB..."
